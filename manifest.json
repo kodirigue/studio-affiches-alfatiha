@@ -1,0 +1,12 @@
+{
+  "name": "Studio d'affiches · Pharmacie Al Fatiha",
+  "short_name": "Affiches",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F4F5F2",
+  "theme_color": "#2E9B3E",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

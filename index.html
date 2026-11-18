@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2E9B3E">
+<title>Studio d'affiches · Pharmacie Al Fatiha</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+  :root{--bg:#F4F5F2;--card:#fff;--ink:#15201B;--muted:#5E6B64;--line:#E3E6E1;--brand:#2E9B3E;--radius:16px}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .top{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}
+  .top canvas{width:36px;height:36px;border-radius:9px;flex:none}
+  .top h1{font-size:16px;margin:0;font-weight:800;letter-spacing:-.01em}
+  .top p{margin:0;font-size:12.5px;color:var(--muted)}
+  .top .sp{flex:1}
+  main{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:24px;padding:24px;max-width:1280px;margin:0 auto;align-items:start}
+  .stage{position:sticky;top:80px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .canvas-wrap{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;width:100%;display:flex;justify-content:center}
+  #cv{display:block;max-width:100%;max-height:calc(100vh - 220px);width:auto;height:auto;border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 30px rgba(0,0,0,.08)}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  button{font:inherit;cursor:pointer;color:inherit}
+  .btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;font-size:14.5px;background:var(--ink);color:#fff}
+  .btn.brand{background:var(--brand)}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn.sm{padding:9px 13px;font-size:13.5px;border-radius:10px}
+  .panel{display:flex;flex-direction:column;gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .card h2{font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 12px;font-weight:700;display:flex;gap:8px;align-items:center}
+  .card h2 b{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px;letter-spacing:0}
+  label{display:block;font-size:13px;font-weight:600;margin:12px 0 6px}
+  .first{margin-top:0}
+  input[type=text],textarea,select{width:100%;font:inherit;font-size:15px;color:var(--ink);background:#FAFBF9;border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none}
+  input:focus,textarea:focus,select:focus{border-color:var(--brand);background:#fff;box-shadow:0 0 0 3px rgba(46,155,62,.14)}
+  textarea{resize:vertical;min-height:80px;line-height:1.45}
+  .hint{font-size:12.5px;color:var(--muted);margin:8px 0 0;line-height:1.45}
+  .hint a{color:var(--brand);font-weight:600}
+  .types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .types button,.chips button{border:1px solid var(--line);background:#FAFBF9;border-radius:12px;padding:10px 8px;font-size:13px;font-weight:700;text-align:center}
+  .types button span{display:block;font-size:20px;margin-bottom:2px}
+  .types button[aria-pressed=true],.chips button[aria-pressed=true]{border-color:var(--brand);background:#EEF7F0;box-shadow:inset 0 0 0 1px var(--brand)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chips button{padding:8px 12px}
+  .row{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap}
+  .row input{flex:1;min-width:150px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .grid .ph{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:2px solid transparent;background:#EEF0EC;padding:0}
+  .grid .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .grid .ph[aria-pressed=true]{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand)}
+  .grid .ph .x{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:22px;text-align:center}
+  .grid .ph .cap{position:absolute;left:0;right:0;bottom:0;padding:3px 4px;background:rgba(14,75,34,.78);color:#fff;font-size:10.5px;font-weight:700;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .grid .add{display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--muted);border:2px dashed var(--line);background:#FAFBF9;cursor:pointer}
+  .grid .add input{display:none}
+  .variants{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:start}
+  .variants button{border:1px solid var(--line);background:#FAFBF9;border-radius:12px;padding:6px 6px 8px;font-size:12.5px;font-weight:700;display:flex;flex-direction:column;gap:6px;align-items:center}
+  .variants canvas{width:100%;height:auto;border-radius:6px;display:block;background:#EEF0EC;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .variants button[aria-pressed=true]{border-color:var(--brand);background:#EEF7F0;box-shadow:inset 0 0 0 1px var(--brand)}
+  .stickers{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+  .stickers button{position:relative;border:1px solid var(--line);background:#FAFBF9;border-radius:12px;padding:3px;aspect-ratio:1;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--muted)}
+  .stickers canvas{width:100%;height:100%;display:block}
+  .stickers button[aria-pressed=true]{border-color:var(--brand);background:#EEF7F0;box-shadow:inset 0 0 0 1px var(--brand)}
+  .stickers button.rec::after{content:"";position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#F2C200;box-shadow:0 0 0 2px #fff}
+  .stickers .x{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;font-size:12px;line-height:20px;text-align:center}
+  .stickers label.add{border:2px dashed var(--line);border-radius:12px;display:grid;place-items:center;aspect-ratio:1;font-size:24px;color:var(--muted);cursor:pointer;margin:0}
+  .stickers label.add input{display:none}
+  .emojis{display:flex;flex-wrap:wrap;gap:6px}
+  .emojis button{border:1px solid var(--line);background:#FAFBF9;border-radius:10px;width:40px;height:40px;font-size:21px;padding:0}
+  .emojis button[aria-pressed=true]{border-color:var(--brand);background:#EEF7F0;box-shadow:inset 0 0 0 1px var(--brand)}
+  .links{display:flex;gap:8px;flex-wrap:wrap}
+  .links a{font-size:13px;font-weight:700;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+  .switch{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;margin-top:10px}
+  .overlay{position:fixed;inset:0;background:rgba(10,16,13,.86);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:14px;z-index:20}
+  .overlay.on{display:flex}
+  .overlay img{max-width:100%;max-height:78vh;border-radius:6px}
+  .overlay p{color:#fff;margin:0;font-size:14px;text-align:center}
+  .sheet{position:fixed;inset:0;background:rgba(10,16,13,.5);z-index:15;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:24px 12px}
+  .sheet.on{display:flex}
+  .sheet .card{max-width:520px;width:100%}
+  .sheet header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .sheet header h2{margin:0}
+  @media (max-width:900px){
+    main{grid-template-columns:1fr;padding:12px;gap:12px}
+    .stage{position:static}
+    #cv{max-height:60vh}
+    .canvas-wrap{padding:10px}
+  }
+</style>
+</head>
+<body>
+<div class="top">
+  <canvas id="miniLogo" width="72" height="72"></canvas>
+  <div><h1>Studio d'affiches</h1><p id="topSub">Pharmacie</p></div>
+  <div class="sp"></div>
+  <button class="btn ghost sm" id="openBrand">Ma pharmacie</button>
+</div>
+
+<main>
+  <section class="stage">
+    <div class="canvas-wrap"><canvas id="cv" width="1080" height="1920" aria-label="Aperçu de l'affiche"></canvas></div>
+    <div class="actions">
+      <button class="btn brand" id="dl">Télécharger</button>
+      <button class="btn ghost" id="share" hidden>Partager sur WhatsApp…</button>
+      <button class="btn ghost" id="view">Voir en grand</button>
+    </div>
+    <p class="hint" id="dlStatus"></p>
+  </section>
+
+  <section class="panel">
+    <div class="card">
+      <h2><b>1</b>Modèle</h2>
+      <div class="types" id="types"></div>
+      <div id="calWrap">
+        <label for="cal">Journée ou mois de sensibilisation</label>
+        <select id="cal"></select>
+        <p class="hint">Les textes sont préremplis : relisez et ajustez si besoin.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><b>2</b>Mise en page</h2>
+      <div class="variants" id="variants"></div>
+      <label for="format">Format</label>
+      <select id="format"></select>
+      <div id="bgWrap">
+        <label>Fond</label>
+        <div class="chips" id="bgChips"></div>
+      </div>
+    </div>
+
+    <div class="card" id="stickerCard">
+      <h2><b>3</b>Sticker</h2>
+      <p class="hint" id="stHint" style="margin:0 0 10px"></p>
+      <div class="stickers" id="stGrid"></div>
+      <div class="row" id="stReset" hidden><button class="btn ghost sm" type="button" id="stResetBtn">Revenir au sticker proposé</button></div>
+      <label>Ou un emoji</label>
+      <div class="emojis" id="emoChips"></div>
+      <div class="row"><input type="text" id="emoIn" placeholder="Ou collez un autre emoji, ex. 🫀" maxlength="16"><button class="btn ghost sm" type="button" id="emoOk">Utiliser</button></div>
+      <label>Ou votre propre image</label>
+      <div class="stickers" id="stOwn"></div>
+      <p class="hint">Une illustration ou un pictogramme en PNG sans fond rend le mieux. Elle reste enregistrée sur ce téléphone.</p>
+    </div>
+
+    <div class="card" id="photoCard">
+      <h2><b>3</b>Photo</h2>
+      <p class="hint" id="photoHint" style="margin:0 0 10px"></p>
+      <label class="first">Photos prêtes à l'emploi</label>
+      <div class="grid" id="libStock"></div>
+      <label>Vos photos (façade, comptoir, produits…)</label>
+      <div class="grid" id="lib"></div>
+      <div class="chips" id="photoFit" style="margin-top:10px"></div>
+      <p class="hint">Vos photos restent enregistrées sur ce téléphone.</p>
+      <label>Besoin d'une autre photo ? (gratuites, libres de droits)</label>
+      <div class="row" style="margin-top:0"><input type="text" id="webQ" placeholder="Ex. : pharmacienne africaine, moustiquaire"></div>
+      <div class="links" style="margin-top:8px">
+        <a id="lkPexels" href="https://www.pexels.com/fr-fr/" target="_blank" rel="noopener">Chercher sur Pexels ↗</a>
+        <a id="lkUnsplash" href="https://unsplash.com/fr" target="_blank" rel="noopener">Chercher sur Unsplash ↗</a>
+      </div>
+      <p class="hint">Téléchargez la photo, puis ajoutez-la avec le bouton ＋.</p>
+    </div>
+
+    <div class="card">
+      <h2><b>4</b>Textes</h2>
+      <div id="fields"></div>
+    </div>
+  </section>
+</main>
+
+<div class="sheet" id="brandSheet">
+  <div class="card">
+    <header><h2>Ma pharmacie</h2><button class="btn ghost sm" id="closeBrand">Terminé</button></header>
+    <p class="hint" style="margin:0 0 6px">À remplir une seule fois : ces infos apparaissent sur toutes les affiches. Les couleurs et les polices suivent la charte de la pharmacie.</p>
+    <label for="b_name">Nom (après « Pharmacie »)</label><input type="text" id="b_name">
+    <label for="b_tagline">Slogan</label><input type="text" id="b_tagline">
+    <label for="b_phone">Téléphone</label><input type="text" id="b_phone">
+    <label class="switch"><input type="checkbox" id="b_whatsapp"> Ce numéro est aussi sur WhatsApp</label>
+    <label for="b_address">Adresse ou repère</label><input type="text" id="b_address">
+    <label>Logo (facultatif)</label>
+    <div class="row" style="margin-top:0"><input type="file" id="b_logo" accept="image/*"><button class="btn ghost sm" id="b_noLogo" type="button">Retirer</button></div>
+    <p class="hint">Sans logo, la croix verte et la feuille jaune de la charte sont utilisées. Un PNG à fond transparent rend le mieux.</p>
+  </div>
+</div>
+
+<div class="overlay" id="ov">
+  <img id="ovImg" alt="Affiche">
+  <p>Sur téléphone : appui long sur l'image pour l'enregistrer.</p>
+  <button class="btn ghost" id="ovClose">Fermer</button>
+</div>
+
+<script>
+(() => {
+/* ================= Charte ================= */
+const CFG = Object.assign({ name: "", tagline: "", phone: "", whatsapp: true, address: "", logo: "" }, window.PHARMACIE || {});
+const W = 1080, K = 2, SW = 540; // every poster is drawn in a 540-wide space, scaled ×2
+const TITLE_F = '"Bricolage Grotesque", "Plus Jakarta Sans", system-ui, sans-serif';
+const BODY_F = 'Inter, "Plus Jakarta Sans", system-ui, sans-serif';
+const CH = { green: "#2E9B3E", deep: "#0E4B22", deeper: "#0A3A1A", mid: "#1F7A33", yellow: "#F2C200", pale: "#EEF6EC", text: "#1F3D29", mint: "#9ED9A6", light: "#D7F0DB" };
+const FORMATS = {
+  statut: { h: 1920, label: "Statut WhatsApp / Story (9:16)" },
+  post:   { h: 1350, label: "Publication Facebook / Instagram (4:5)" },
+  carre:  { h: 1080, label: "Carré (1:1)" }
+};
+/* Ready-to-use photos shipped in photos/ (see photos/CREDITS.md). x/y = where the face or subject sits. */
+const LIB = [
+  { id: "lib:facade", src: "photos/facade-al-fatiha.jpg", label: "Façade", x: 0.5, y: 0.5 },
+  { id: "lib:produits", src: "photos/produits-evoluderm.jpg", label: "Produits", x: 0.5, y: 0.45 },
+  { id: "lib:voile", src: "photos/pharmacienne-voile-medicaments.jpg", label: "Pharmacienne", x: 0.5, y: 0.15 },
+  { id: "lib:voile2", src: "photos/pharmacienne-voile-souriante.jpg", label: "Pharmacienne", x: 0.5, y: 0.12 },
+  { id: "lib:conseil", src: "photos/pharmacien-conseil-cliente.jpg", label: "Conseil", x: 0.5, y: 0.3 },
+  { id: "lib:blouse", src: "photos/pharmacienne-blouse-souriante.jpg", label: "Pharmacienne", x: 0.62, y: 0.3 },
+  { id: "lib:blouse2", src: "photos/pharmacienne-blouse-fond-clair.jpg", label: "Pharmacienne", x: 0.56, y: 0.3 },
+  { id: "lib:tablette", src: "photos/pharmacienne-tablette.jpg", label: "Pharmacienne", x: 0.5, y: 0.25 },
+  { id: "lib:dynamique", src: "photos/pharmacienne-dynamique.jpg", label: "Pharmacienne", x: 0.5, y: 0.2 }
+];
+
+/* Models. light/dark = the two allowed backgrounds; photo: "need" | "option" | null; pic = default photo */
+const TYPES = {
+  produit: { icon: "🛍️", label: "Produit", light: "white", photo: "need", pic: "lib:produits", fields: [
+    { k: "badge", l: "Macaron", d: "Disponible" },
+    { k: "label", l: "Catégorie", d: "Parapharmacie · soin de la peau" },
+    { k: "title", l: "Nom du produit / de la gamme", d: "Gamme *Evoluderm* carotte & vitamine C" },
+    { k: "subtitle", l: "Description courte", t: "ta", d: "Soins du visage, gels douche, laits corps et eaux micellaires." },
+    { k: "price", l: "Prix (facultatif)", d: "" },
+    { k: "extra", l: "Mention", d: "Livraison possible" } ] },
+  promo: { icon: "🏷️", label: "Promotion", light: "white", dark: "green", bg: "vert", photo: "option", pic: "lib:produits", fields: [
+    { k: "badge", l: "Étiquette", d: "Offre du mois" },
+    { k: "value", l: "Valeur mise en avant", d: "-20 %" },
+    { k: "title", l: "Sur quoi", d: "sur les soins *Evoluderm*" },
+    { k: "points", l: "Détails (un par ligne)", t: "ta", d: "Visage\nCorps\nDémaquillants" },
+    { k: "period", l: "Validité", d: "Jusqu'au 15 décembre" },
+    { k: "legal", l: "Mention", d: "Parapharmacie uniquement, dans la limite des stocks disponibles." } ] },
+  ouvert: { icon: "🟢", label: "Ouverts", light: "white", photo: "need", pic: "lib:voile", fields: [
+    { k: "lead", l: "Début de phrase", d: "Votre pharmacie est" },
+    { k: "title", l: "Mot fort", d: "*ouverte*" },
+    { k: "days", l: "Jours", d: "Lun. – sam." },
+    { k: "hours", l: "Horaires", d: "7 h 30 – 22 h" },
+    { k: "note", l: "Précision", d: "Dimanche : garde uniquement" },
+    { k: "points", l: "Services (un par ligne)", t: "ta", d: "Médicaments\nConseils\nParapharmacie\nLivraison possible" } ] },
+  garde: { icon: "🌙", label: "De garde", light: "pale", dark: "deep", bg: "vert", photo: "option", pic: "lib:facade", fields: [
+    { k: "lead", l: "Début de phrase", d: "Cette semaine, nous sommes" },
+    { k: "title", l: "Mot fort", d: "de garde" },
+    { k: "big", l: "Grand repère", d: "24 h / 24" },
+    { k: "period", l: "Période", d: "Du samedi 22 au vendredi 28 nov." },
+    { k: "note", l: "Note", t: "ta", d: "La nuit, présentez-vous au guichet avec votre ordonnance." } ] },
+  sante: { icon: "🩺", label: "Journée santé", light: "pale", dark: "green", choose: true, fields: [
+    { k: "eyebrow", l: "Événement", d: "" },
+    { k: "big", l: "Date (pastille)", d: "" },
+    { k: "title", l: "Titre", d: "" },
+    { k: "subtitle", l: "Phrase d'accroche", t: "ta", d: "" },
+    { k: "points", l: "Conseils (un par ligne, 4 maximum)", t: "ta", d: "" },
+    { k: "cta", l: "Appel à l'action", d: "Demandez conseil à votre pharmacien" } ] },
+  conseil: { icon: "💡", label: "Le saviez-vous ?", light: "pale", dark: "green", bg: "vert", choose: true, fields: [
+    { k: "badge", l: "Étiquette", d: "Le saviez-vous ?" },
+    { k: "big", l: "Chiffre", d: "20" },
+    { k: "unit", l: "Unité", d: "secondes" },
+    { k: "title", l: "Explication", t: "ta", d: "C'est le temps qu'il faut pour bien se laver les mains au savon." },
+    { k: "points", l: "Étapes (une par ligne)", t: "ta", d: "Mouillez, puis savonnez les mains\nFrottez paumes, dos, entre les doigts et les ongles\nRincez et séchez avec un linge propre" },
+    { k: "note", l: "Note", d: "Pas d'eau sous la main ? Le gel hydroalcoolique est disponible à la pharmacie." } ] },
+  mythe: { icon: "❓", label: "Vrai ou faux ?", light: "white", dark: "green", choose: true, fields: [
+    { k: "title", l: "Titre", d: "Vrai ou *faux ?*" },
+    { k: "claim", l: "Idée reçue", t: "ta", d: "Si je me sens bien, ma tension est forcément normale." },
+    { k: "verdict", l: "Réponse (VRAI ou FAUX)", d: "FAUX" },
+    { k: "answer", l: "Explication courte", d: "La tension trop élevée ne donne souvent *aucun signe*." },
+    { k: "body", l: "Détail", t: "ta", d: "Le seul moyen de savoir, c'est de la mesurer régulièrement, surtout après 40 ans ou s'il y a des cas dans la famille." },
+    { k: "cta", l: "Question au public", d: "Vous aviez la bonne réponse ? Dites-le-nous en message !" } ] },
+  question: { icon: "💬", label: "Un conseil ?", light: "white", photo: "need", pic: "lib:conseil", fields: [
+    { k: "label", l: "Étiquette", d: "Une question ?" },
+    { k: "title", l: "Titre", d: "Votre pharmacien vous *répond*." },
+    { k: "subtitle", l: "Texte", t: "ta", d: "Un produit, un traitement, un soin pour bébé ? Passez nous voir ou écrivez-nous, on prend le temps de vous expliquer." },
+    { k: "cta", l: "Bouton", d: "Écrivez-nous sur WhatsApp" } ] },
+  mois: { icon: "📅", label: "Bon mois", light: "pale", dark: "green", choose: true, fields: [
+    { k: "lead", l: "Début", d: "Bon mois de" },
+    { k: "title", l: "Mois", d: "décembre" },
+    { k: "tile", l: "Calendrier", d: "DÉC. 2026" },
+    { k: "message", l: "Vœu", t: "ta", d: "Que ce mois vous apporte *santé*, paix et sérénité, à vous et à vos proches." },
+    { k: "points", l: "3 bonnes habitudes (une par ligne)", t: "ta", d: "Buvez de l'eau\nBougez chaque jour\nDormez suffisamment" },
+    { k: "note", l: "Signature", d: "Toute l'équipe Al Fatiha reste à vos côtés." } ] },
+  fete: { icon: "🎉", label: "Fêtes", light: "pale", dark: "deep", bg: "vert", choose: true, fields: [
+    { k: "title", l: "Titre", d: "Joyeuses *fêtes*" },
+    { k: "subtitle", l: "Sous-titre", d: "de fin d'année" },
+    { k: "message", l: "Message", t: "ta", d: "Toute l'équipe de la Pharmacie Al Fatiha vous souhaite, à vous et à votre famille, de belles fêtes dans la paix et la santé." } ] },
+  annonce: { icon: "📢", label: "Annonce", light: "pale", dark: "green", choose: true, fields: [
+    { k: "eyebrow", l: "Étiquette", d: "Information" },
+    { k: "title", l: "Titre", d: "*Nouveaux horaires* dès le 1er décembre" },
+    { k: "body", l: "Texte", t: "ta", d: "Pour mieux vous servir, la pharmacie ouvre plus tôt en semaine." },
+    { k: "rows", l: "Lignes « Libellé : valeur »", t: "ta", d: "Lundi – vendredi : 7 h 30 – 22 h\nSamedi : 8 h – 22 h\nDimanche : garde uniquement" } ] }
+};
+for (const t of Object.values(TYPES)) { t.dark = t.dark || "green"; t.bg = t.bg || "clair"; if (t.dark && t.bg === "vert") t.choose = t.choose !== false; }
+
+/* Three layouts per model. f = frame: own (the model's original), full (photo plein cadre), top (photo en haut),
+   medal (photo ronde, centré), center (centré, sticker possible), band (bandeau + sticker, journée santé).
+   photo: "need" | "option"; st: the layout shows a sticker. */
+const VARIANTS = {
+  produit:  [{ n: "Vitrine", f: "own", photo: "need" }, { n: "Plein cadre", f: "full", photo: "need" }, { n: "Médaillon", f: "medal", photo: "need" }],
+  promo:    [{ n: "Classique", f: "own", photo: "option" }, { n: "Centrée", f: "center" }, { n: "Plein cadre", f: "full", photo: "need" }],
+  ouvert:   [{ n: "Arche", f: "own", photo: "need" }, { n: "Photo en haut", f: "top", photo: "need" }, { n: "Plein cadre", f: "full", photo: "need" }],
+  garde:    [{ n: "Façade", f: "own", photo: "option" }, { n: "Photo en haut", f: "top", photo: "need" }, { n: "Nuit", f: "center" }],
+  sante:    [{ n: "Classique", f: "own", st: 1 }, { n: "Grand sticker", f: "center", st: 1 }, { n: "Bandeau", f: "band", st: 1 }],
+  conseil:  [{ n: "Classique", f: "own" }, { n: "Avec sticker", f: "center", st: 1 }, { n: "Photo en haut", f: "top", photo: "need" }],
+  mythe:    [{ n: "Classique", f: "own" }, { n: "Avec sticker", f: "center", st: 1 }, { n: "Photo en haut", f: "top", photo: "need" }],
+  question: [{ n: "Photo en haut", f: "own", photo: "need" }, { n: "Plein cadre", f: "full", photo: "need" }, { n: "Médaillon", f: "medal", photo: "need" }],
+  mois:     [{ n: "Calendrier", f: "own" }, { n: "Centrée", f: "center" }, { n: "Photo en haut", f: "top", photo: "need" }],
+  fete:     [{ n: "Logo", f: "own" }, { n: "Photo en haut", f: "top", photo: "need" }, { n: "Plein cadre", f: "full", photo: "need" }],
+  annonce:  [{ n: "Classique", f: "own" }, { n: "Avec sticker", f: "center", st: 1 }, { n: "Photo en haut", f: "top", photo: "need" }]
+};
+const PICS = { conseil: "lib:blouse2", mythe: "lib:tablette", mois: "lib:blouse", fete: "lib:voile2", annonce: "lib:facade" };
+const STICKER_DEFAULT = { conseil: "ampoule", mythe: "vraifaux", annonce: "megaphone" };
+for (const [id, t] of Object.entries(TYPES)) { t.v = VARIANTS[id]; if (PICS[id]) t.pic = PICS[id]; delete t.photo; }
+
+/* Health calendar: pre-written, general advice only. color = symbol of the day (the only colour allowed outside the charte) */
+const CALENDAR = [
+  { id: "paludisme", date: "25 avril", name: "Journée mondiale du paludisme", color: null, big: "25 AVRIL", title: "Le *paludisme*, on peut l'éviter.", subtitle: "Quelques gestes simples protègent toute la famille, surtout les enfants et les femmes enceintes.", points: "Dormez sous moustiquaire imprégnée\nÉliminez les eaux stagnantes\nFièvre ? Consultez sans attendre\nPas de traitement sans avis" },
+  { id: "mains", date: "5 mai", name: "Journée mondiale de l'hygiène des mains", color: "#1D5BB5", big: "5 MAI", title: "Des *mains propres*, une santé protégée.", subtitle: "Le lavage des mains au savon reste l'un des gestes les plus efficaces contre les infections.", points: "Avant de manger et de cuisiner\nAprès les toilettes\nFrottez au moins 20 secondes\nSavon ou gel hydroalcoolique" },
+  { id: "hta", date: "17 mai", name: "Journée mondiale de l'hypertension", color: "#C62828", big: "17 MAI", title: "Votre *tension*, vous la connaissez ?", subtitle: "L'hypertension ne fait souvent pas mal. La mesurer, c'est la repérer à temps.", points: "Faites mesurer votre tension\nMoins de sel dans les plats\nBougez un peu chaque jour\nSuivez votre traitement" },
+  { id: "tabac", date: "31 mai", name: "Journée mondiale sans tabac", color: "#1D5BB5", big: "31 MAI", title: "Arrêter, c'est *possible.*", subtitle: "Quel que soit votre âge, arrêter le tabac est bénéfique pour vous et votre entourage.", points: "Fixez-vous une date d'arrêt\nDemandez conseil au pharmacien\nÉloignez la fumée des enfants\nChaque cigarette en moins compte" },
+  { id: "drepano", date: "19 juin", name: "Journée mondiale de la drépanocytose", color: "#C62828", big: "19 JUIN", title: "Drépanocytose : connaissez *votre statut.*", subtitle: "Un simple test sanguin permet de connaître son statut et de mieux protéger sa famille.", points: "Faites l'électrophorèse de l'hémoglobine\nInformez-vous avant de fonder une famille\nBuvez beaucoup d'eau\nSuivi médical régulier" },
+  { id: "hepatite", date: "28 juillet", name: "Journée mondiale contre l'hépatite", color: "#D9661F", big: "28 JUIL.", title: "Hépatites : *faites le test.*", subtitle: "Une hépatite peut rester silencieuse pendant des années. Le dépistage permet d'agir tôt.", points: "Faites-vous dépister\nVaccinez-vous contre l'hépatite B\nNe partagez ni rasoir ni brosse à dents\nProtégez-vous lors des rapports" },
+  { id: "coeur", date: "29 septembre", name: "Journée mondiale du cœur", color: "#C62828", big: "29 SEPT.", title: "Prenez soin de *votre cœur.*", subtitle: "De petits changements au quotidien protègent votre cœur sur le long terme.", points: "Surveillez votre tension\nMoins de sel, moins de gras\n30 minutes d'activité par jour\nArrêtez le tabac" },
+  { id: "octobre", date: "Octobre", name: "Octobre rose · cancer du sein", color: "#E0457B", big: "OCTOBRE", title: "Octobre rose : *on en parle.*", subtitle: "Un cancer du sein repéré tôt se soigne mieux. Restez attentive à votre corps.", points: "Autopalpation chaque mois\nBoule, rougeur, écoulement : consultez\nParlez du dépistage à votre médecin\nEncouragez vos proches" },
+  { id: "mentale", date: "10 octobre", name: "Journée mondiale de la santé mentale", color: "#6440B0", big: "10 OCT.", title: "Votre *moral* compte aussi.", subtitle: "Prendre soin de sa santé mentale, c'est prendre soin de sa santé tout court.", points: "Parlez de ce que vous ressentez\nDormez suffisamment\nRestez en lien avec vos proches\nDemander de l'aide n'est pas une faiblesse" },
+  { id: "novembre", date: "Novembre", name: "Novembre bleu · santé masculine", color: "#1D5BB5", big: "NOV.", title: "Messieurs, *parlons santé.*", subtitle: "Un contrôle régulier permet de repérer tôt les problèmes de prostate, de tension ou de moral.", points: "Parlez du dépistage de la prostate\nFaites contrôler votre tension\nBougez et mangez équilibré\nPrenez soin de votre moral" },
+  { id: "diabete", date: "14 novembre", name: "Journée mondiale du diabète", color: "#1D5BB5", big: "14 NOV.", title: "Le *diabète*, parlons-en.", subtitle: "Quatre gestes simples pour prendre soin de soi et de sa famille.", points: "Faites contrôler votre glycémie régulièrement\nMangez équilibré, moins sucré\nBougez au moins 30 minutes par jour\nPréférez l'eau aux boissons sucrées" },
+  { id: "sida", date: "1er décembre", name: "Journée mondiale de lutte contre le sida", color: "#C62828", big: "1ER DÉC.", title: "Le *dépistage*, c'est la première protection.", subtitle: "Connaître son statut permet d'être soigné tôt et de protéger ses proches.", points: "Faites le test, c'est rapide\nProtégez-vous à chaque rapport\nLe traitement permet de vivre normalement\nNon à la stigmatisation" },
+  { id: "libre", date: "", name: "Autre sujet (page vierge)", color: null, big: "", title: "Votre titre ici", subtitle: "", points: "" }
+];
+const DAY_STICKER = { paludisme: "moustique", mains: "savon", hta: "tension", tabac: "tabac", drepano: "drepano", hepatite: "foie", coeur: "coeur", octobre: "ruban", mentale: "tete", novembre: "moustache", diabete: "diabete", sida: "ruban", libre: "croix" };
+CALENDAR.forEach(c => { c.sticker = DAY_STICKER[c.id] || "croix"; });
+
+/* Ready-made texts per model (n = name in the list, d = field values; missing fields fall back to the model's defaults).
+   Examples to adapt: dates, hours and prices must be checked; health texts are general advice, to be reviewed by the pharmacist. */
+const IDEAS = {
+  produit: [
+    { n: "Soins Evoluderm", d: {} },
+    { n: "Protection solaire", d: { label: "Parapharmacie · soleil", title: "Écran *solaire* SPF 50+", subtitle: "Protège la peau du soleil et aide à prévenir les taches. À appliquer avant de sortir, puis à renouveler.", extra: "Conseils au comptoir" } },
+    { n: "Répulsifs et moustiquaires", d: { badge: "En stock", label: "Prévention · paludisme", title: "*Répulsifs* et moustiquaires imprégnées", subtitle: "Pour protéger toute la famille des piqûres de moustiques, surtout le soir et la nuit.", extra: "Plusieurs tailles disponibles" } },
+    { n: "Coin bébé", d: { badge: "Nouveau", label: "Bébé & maman", title: "Le coin *bébé* est réapprovisionné", subtitle: "Laits infantiles, couches, soins du siège, biberons et tétines.", extra: "Conseils selon l'âge de bébé" } },
+    { n: "Tensiomètre", d: { label: "Matériel médical", title: "*Tensiomètre* électronique au bras", subtitle: "Pour suivre sa tension à la maison, simplement et en quelques secondes.", extra: "On vous montre comment l'utiliser" } },
+    { n: "Lecteur de glycémie", d: { label: "Matériel médical", title: "Lecteur de *glycémie*", subtitle: "Pour les personnes diabétiques qui suivent leur taux de sucre à la maison. Bandelettes et lancettes disponibles.", extra: "Explications au comptoir" } },
+    { n: "Hygiène des mains", d: { label: "Hygiène", title: "Gels *hydroalcooliques* et savons", subtitle: "Formats de poche et grands flacons, pour la maison, l'école et le bureau.", extra: "Livraison possible" } },
+    { n: "Vitamines", d: { label: "Compléments alimentaires", title: "Vitamines & *compléments*", subtitle: "Fatigue, grossesse, croissance des enfants : demandez celui qui vous convient.", extra: "Toujours sur conseil" } }
+  ],
+  promo: [
+    { n: "-20 % Evoluderm", d: {} },
+    { n: "Tension mesurée gratuitement", d: { badge: "Service offert", value: "Gratuit", title: "la prise de *tension*", points: "Sans rendez-vous\nRésultat en 2 minutes\nConseils personnalisés", period: "Tous les samedis de décembre", legal: "Service proposé à la pharmacie, dans la limite des disponibilités." } },
+    { n: "2 achetés, 1 offert", d: { badge: "Offre spéciale", value: "2 + 1", title: "*offert* sur les gels douche", points: "Toutes les marques\nTous les parfums", period: "Jusqu'au 31 décembre", legal: "Le moins cher des trois est offert. Dans la limite des stocks disponibles." } },
+    { n: "Spécial soleil", d: { badge: "Saison sèche", value: "-15 %", title: "sur les *protections solaires*", points: "Visage\nCorps\nEnfants", period: "Tout le mois", legal: "Parapharmacie uniquement, dans la limite des stocks disponibles." } },
+    { n: "Pack bébé", d: { badge: "Pack bébé", value: "-10 %", title: "sur le pack *soins de bébé*", points: "Lait de toilette\nCrème pour le change\nLingettes", period: "Jusqu'au 15 janvier", legal: "Parapharmacie uniquement, dans la limite des stocks disponibles." } }
+  ],
+  ouvert: [
+    { n: "Horaires de la semaine", d: {} },
+    { n: "Ouverts ce dimanche", d: { lead: "Bonne nouvelle, nous sommes", title: "*ouverts*", days: "Ce dimanche", hours: "8 h – 20 h", note: "Service de garde", points: "Médicaments\nConseils\nUrgences" } },
+    { n: "Jour férié", d: { lead: "Même en ce jour férié,", title: "on est *là*", days: "Jour férié", hours: "8 h – 13 h", note: "Horaires réduits ce jour-là" } },
+    { n: "Bonjour du matin", d: { lead: "Bonjour ! Votre pharmacie est", title: "*ouverte*", days: "Dès ce matin", hours: "7 h 30 – 22 h", note: "On vous accueille avec le sourire" } },
+    { n: "Réouverture", d: { lead: "C'est la réouverture !", title: "*Bienvenue*", days: "Dès aujourd'hui", hours: "7 h 30 – 22 h", note: "Un espace rénové pour mieux vous servir", points: "Plus d'espace\nPlus de produits\nToujours les mêmes conseils" } }
+  ],
+  garde: [
+    { n: "Garde de la semaine", d: {} },
+    { n: "Garde du week-end", d: { lead: "Ce week-end, nous sommes", big: "Sam. & dim.", period: "Samedi 6 et dimanche 7 décembre" } },
+    { n: "Garde de nuit", d: { lead: "Cette nuit, nous sommes", big: "Jusqu'à 7 h", period: "Nuit du vendredi 12 au samedi 13 déc.", note: "Sonnez au guichet, nous vous servons par la fenêtre de garde." } },
+    { n: "Garde des fêtes", d: { lead: "Pendant les fêtes, nous sommes", big: "24 h / 24", period: "Du mercredi 24 au vendredi 26 déc.", note: "Pensez à apporter votre ordonnance et votre carnet de santé." } }
+  ],
+  conseil: [
+    { n: "Lavage des mains : 20 secondes", d: {} },
+    { n: "Boire de l'eau", d: { big: "1,5", unit: "litre d'eau", title: "C'est à peu près ce qu'un adulte devrait boire chaque jour, un peu plus quand il fait chaud.", points: "Gardez une bouteille près de vous\nBuvez avant d'avoir soif\nFaites boire souvent les enfants et les aînés", note: "Fatigue, maux de tête, urines foncées ? Pensez à boire." } },
+    { n: "Marcher 30 minutes", d: { big: "30", unit: "minutes", title: "de marche par jour suffisent pour prendre soin de son cœur.", points: "Marchez d'un bon pas\nPrenez les escaliers\nCoupez le trajet en deux ou trois fois", note: "Vous avez un traitement ou un souci de santé ? Demandez conseil avant de reprendre le sport." } },
+    { n: "Une moustiquaire par lit", d: { big: "1", unit: "moustiquaire", title: "par lit, chaque nuit : c'est la meilleure protection contre le paludisme.", points: "Choisissez-la imprégnée\nBordez-la bien sous le matelas\nRéparez vite les trous", note: "Répulsifs et moustiquaires sont disponibles à la pharmacie." } },
+    { n: "Moins de sel", d: { big: "5 g", unit: "de sel", title: "par jour au maximum, soit une petite cuillère, tout compris.", points: "Goûtez avant de saler\nLimitez les cubes et bouillons\nPréférez les épices et les herbes", note: "Moins de sel, c'est bon pour la tension." } },
+    { n: "Bien conserver ses médicaments", d: { badge: "Bon à savoir", big: "3", unit: "règles", title: "pour bien conserver vos médicaments à la maison.", points: "À l'abri de la chaleur et du soleil\nDans leur boîte, avec la notice\nHors de portée des enfants", note: "Médicaments périmés ? Rapportez-les à la pharmacie." } },
+    { n: "Dormir 7 heures", d: { big: "7 h", unit: "de sommeil", title: "C'est ce dont un adulte a besoin en moyenne chaque nuit.", points: "Couchez-vous à heure régulière\nÉvitez les écrans avant de dormir\nLimitez le café le soir", note: "Le sommeil aide le corps à se défendre et à récupérer." } },
+    { n: "Se brosser les dents", d: { big: "2", unit: "minutes", title: "de brossage, matin et soir, pour garder des dents saines.", points: "Brosse souple et dentifrice fluoré\nToutes les faces des dents\nChangez de brosse tous les 3 mois", note: "Brosses et dentifrices adaptés aux enfants disponibles." } }
+  ],
+  mythe: [
+    { n: "La tension « silencieuse »", d: {} },
+    { n: "Antibiotiques et rhume", d: { claim: "Les antibiotiques soignent le rhume.", verdict: "FAUX", answer: "Le rhume est dû à un *virus* : les antibiotiques n'agissent pas dessus.", body: "Les prendre sans besoin les rend moins efficaces le jour où on en a vraiment besoin. Demandez conseil avant tout traitement." } },
+    { n: "Arrêter son traitement", d: { claim: "Dès que je me sens mieux, je peux arrêter mon traitement.", verdict: "FAUX", answer: "Il faut aller *jusqu'au bout* du traitement prescrit.", body: "Arrêter trop tôt peut faire revenir la maladie. Un effet gênant ou un doute ? Parlez-en au pharmacien ou au médecin." } },
+    { n: "Toute fièvre = palu ?", d: { claim: "Quand on a de la fièvre, c'est forcément le palu.", verdict: "FAUX", answer: "Beaucoup de maladies donnent de la fièvre : *seul un test* le confirme.", body: "Le test rapide permet de savoir. Ne prenez pas d'antipaludique sans avis, et consultez vite pour un enfant." } },
+    { n: "Le diabète et l'âge", d: { claim: "Le diabète ne touche que les personnes âgées.", verdict: "FAUX", answer: "Le diabète peut apparaître *à tout âge*.", body: "Le surpoids, le manque d'activité et les cas dans la famille augmentent le risque. Un contrôle de la glycémie permet de le savoir." } },
+    { n: "Savon et diarrhées", d: { claim: "Se laver les mains au savon protège des diarrhées.", verdict: "VRAI", answer: "C'est l'un des gestes *les plus efficaces* pour toute la famille.", body: "Avant de manger, de cuisiner ou de nourrir bébé, et après les toilettes : savon et eau propre, au moins 20 secondes." } },
+    { n: "Boire quand il fait chaud", d: { claim: "Quand il fait très chaud, il faut boire même sans avoir soif.", verdict: "VRAI", answer: "La soif arrive *souvent trop tard*, surtout chez les enfants et les aînés.", body: "Buvez régulièrement dans la journée, de l'eau de préférence, et gardez les plus fragiles au frais." } }
+  ],
+  question: [
+    { n: "Votre pharmacien vous répond", d: {} },
+    { n: "Comprendre son ordonnance", d: { label: "Votre ordonnance", title: "On vous explique *chaque médicament*.", subtitle: "Quand le prendre, combien de temps, avec ou sans repas : n'hésitez jamais à demander.", cta: "Posez votre question sur WhatsApp" } },
+    { n: "Questions de jeunes parents", d: { label: "Jeunes parents", title: "Une question sur *bébé* ?", subtitle: "Fièvre, lait, rougeurs du siège, poussées dentaires : on vous écoute et on vous oriente.", cta: "Écrivez-nous sur WhatsApp" } },
+    { n: "Soins de la peau", d: { label: "Soins de la peau", title: "Le soin *adapté* à votre peau.", subtitle: "Taches, peau sèche, boutons : on vous aide à choisir parmi nos gammes.", cta: "Passez nous voir ou écrivez-nous" } },
+    { n: "Ordonnance par WhatsApp", d: { label: "Gagnez du temps", title: "Envoyez votre ordonnance sur *WhatsApp*.", subtitle: "On prépare votre commande, vous passez la récupérer sans attendre.", cta: "Envoyez la photo de l'ordonnance" } }
+  ],
+  fete: [
+    { n: "Fêtes de fin d'année", d: {} },
+    { n: "Bonne année", d: { title: "Bonne *année*", subtitle: "Santé, paix et réussite !", message: "Toute l'équipe de la Pharmacie Al Fatiha vous présente ses meilleurs vœux pour la nouvelle année. Merci de votre confiance !" } },
+    { n: "Ramadan", d: { title: "Ramadan *Moubarak*", subtitle: "Bon mois de jeûne", message: "Pendant le jeûne, buvez bien entre la rupture et le repas de l'aube. Vous avez un traitement ? Votre pharmacien vous aide à l'adapter." } },
+    { n: "Fête du Ramadan (Aïd el-Fitr)", d: { title: "Bonne fête de *Ramadan*", subtitle: "Aïd el-Fitr", message: "Toute l'équipe de la Pharmacie Al Fatiha vous souhaite, à vous et à vos proches, une fête bénie dans la paix et la santé." } },
+    { n: "Tabaski (Aïd el-Kébir)", d: { title: "Bonne fête de *Tabaski*", subtitle: "Aïd el-Kébir", message: "En ce jour de partage, toute l'équipe de la Pharmacie Al Fatiha vous souhaite une fête bénie, entourés de ceux que vous aimez." } },
+    { n: "Pâques", d: { title: "Joyeuses *Pâques*", subtitle: "", message: "Toute l'équipe de la Pharmacie Al Fatiha vous souhaite de belles fêtes de Pâques en famille, dans la paix et la santé." } },
+    { n: "Fête des mères", d: { title: "Bonne fête aux *mamans*", subtitle: "Merci pour tout", message: "À toutes les mamans qui prennent soin des autres : aujourd'hui, prenez aussi soin de vous. Belle fête !" } },
+    { n: "Fête du travail (1er mai)", d: { title: "Bonne fête du *travail*", subtitle: "1er mai", message: "Toute l'équipe de la Pharmacie Al Fatiha salue celles et ceux qui travaillent chaque jour. Bonne fête !" } },
+    { n: "Fête de l'Indépendance (1er août)", d: { title: "Fête de l'*Indépendance*", subtitle: "Bonne fête à tous · 1er août", message: "Joyeuse fête nationale à toutes et à tous ! Toute l'équipe de la Pharmacie Al Fatiha vous souhaite une belle journée." } }
+  ],
+  annonce: [
+    { n: "Nouveaux horaires", d: {} },
+    { n: "Fermeture exceptionnelle", d: { eyebrow: "Information", title: "*Fermeture exceptionnelle* lundi 8 décembre", body: "La pharmacie sera fermée pour inventaire. En cas d'urgence, rendez-vous à la pharmacie de garde.", rows: "Lundi 8 décembre : fermé\nMardi 9 décembre : réouverture à 7 h 30" } },
+    { n: "Nouvel arrivage", d: { eyebrow: "Nouveau", title: "*Nouvel arrivage* en parapharmacie", body: "Soins du visage, du corps et des cheveux : venez découvrir les nouveautés et demandez conseil.", rows: "Visage : nouvelles gammes\nCorps : laits et huiles\nCheveux : soins et shampoings" } },
+    { n: "Livraison à domicile", d: { eyebrow: "Service", title: "La *livraison* à domicile, c'est possible", body: "Commandez par téléphone ou sur WhatsApp, on vous livre dans le quartier.", rows: "Zone : Agblangandan et environs\nDélai : dans la journée\nPaiement : à la livraison" } },
+    { n: "Journée de dépistage", d: { eyebrow: "Santé", title: "Journée de *dépistage* gratuit", body: "Tension et glycémie contrôlées gratuitement, sans rendez-vous.", rows: "Date : samedi 13 décembre\nHeure : 9 h – 13 h\nLieu : à la pharmacie" } },
+    { n: "Paiement mobile", d: { eyebrow: "Nouveau", title: "Payez par *Mobile Money*", body: "Réglez vos achats simplement avec votre téléphone.", rows: "MTN MoMo : accepté\nMoov Money : accepté\nEspèces : toujours accepté" } }
+  ]
+};
+/* Bon mois: one idea per month (year = this year, or next year for months already past), with a seasonal habit list */
+const MONTHS = [
+  ["janvier", "JANV.", "Que cette nouvelle année vous apporte *santé*, paix et réussite.", "Buvez de l'eau\nHydratez peau et lèvres\nBougez chaque jour"],
+  ["février", "FÉVR.", "Que ce mois vous garde en *bonne santé*, vous et vos proches.", "Buvez de l'eau\nProtégez-vous de la poussière\nDormez suffisamment"],
+  ["mars", "MARS", "Que ce mois vous apporte *énergie* et sérénité.", "Buvez de l'eau\nMangez des fruits\nBougez chaque jour"],
+  ["avril", "AVRIL", "Que ce mois vous apporte *santé*, paix et douceur.", "Dormez sous moustiquaire\nVidez les eaux stagnantes\nBuvez de l'eau"],
+  ["mai", "MAI", "Que ce mois vous garde *en forme*, vous et votre famille.", "Dormez sous moustiquaire\nLavez-vous les mains\nBuvez de l'eau"],
+  ["juin", "JUIN", "Que ce mois vous apporte *santé* et sérénité.", "Dormez sous moustiquaire\nEau propre et bouillie\nLavez-vous les mains"],
+  ["juillet", "JUIL.", "Que ce mois vous apporte *repos* et bonne santé.", "Dormez sous moustiquaire\nLavez fruits et légumes\nBougez chaque jour"],
+  ["août", "AOÛT", "Bonnes vacances et *bonne santé* à tous !", "Buvez de l'eau\nProtégez-vous du soleil\nDormez suffisamment"],
+  ["septembre", "SEPT.", "Bonne rentrée et *bonne santé* à tous !", "Carnet de vaccination à jour\nPetit-déjeuner avant l'école\nDormez suffisamment"],
+  ["octobre", "OCT.", "Que ce mois vous apporte *santé* et douceur.", "Dormez sous moustiquaire\nBuvez de l'eau\nBougez chaque jour"],
+  ["novembre", "NOV.", "Que ce mois vous garde *en forme*, vous et vos proches.", "Buvez de l'eau\nMangez équilibré\nBougez chaque jour"],
+  ["décembre", "DÉC.", "Que ce mois vous apporte *santé*, paix et sérénité, à vous et à vos proches.", "Buvez de l'eau\nBougez chaque jour\nDormez suffisamment"]
+];
+IDEAS.mois = (() => {
+  const now = new Date(), m0 = now.getMonth(), y0 = now.getFullYear();
+  return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(k => { const i = (m0 + k) % 12, y = y0 + (m0 + k >= 12 ? 1 : 0), [name, ab, msg, pts] = MONTHS[i];
+    return { n: name.charAt(0).toUpperCase() + name.slice(1) + " " + y, d: { lead: /^[aeiouâ]/i.test(name) ? "Bon mois d'" : "Bon mois de", title: name, tile: ab + " " + y, message: msg, points: pts } }; });
+})();
+
+/* ================= Storage ================= */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("affiches3:" + k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem("affiches3:" + k, JSON.stringify(v)); } catch {} }
+};
+const idb = (() => {
+  let dbp = null;
+  const open = () => dbp || (dbp = new Promise((res, rej) => { try { const r = indexedDB.open("affiches", 1); r.onupgradeneeded = () => r.result.createObjectStore("photos", { keyPath: "id" }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); } catch (e) { rej(e); } }));
+  const tx = async (mode, fn) => { const db = await open(); return new Promise((res, rej) => { const t = db.transaction("photos", mode); const out = fn(t.objectStore("photos")); t.oncomplete = () => res(out && out.result); t.onerror = () => rej(t.error); }); };
+  return { all: () => tx("readonly", s => s.getAll()), put: o => tx("readwrite", s => s.put(o)), del: id => tx("readwrite", s => s.delete(id)) };
+})();
+const memPhotos = [];
+
+const brand = Object.assign({ name: CFG.name, tagline: CFG.tagline, phone: CFG.phone, whatsapp: CFG.whatsapp, address: CFG.address }, store.get("brand", {}));
+const saved = store.get("state4", {});
+const state = {
+  type: TYPES[saved.type] ? saved.type : "produit",
+  format: FORMATS[saved.format] ? saved.format : "statut",
+  cal: saved.cal || "diabete",
+  fit: saved.fit === "contain" ? "contain" : "cover",
+  bg: Object.assign({}, saved.bg),
+  photo: Object.assign({}, saved.photo),
+  variant: Object.assign({}, saved.variant),
+  sticker: Object.assign({}, saved.sticker),
+  data: {}
+};
+for (const [id, t] of Object.entries(TYPES)) {
+  state.data[id] = {};
+  for (const f of t.fields) state.data[id][f.k] = saved.data && saved.data[id] && typeof saved.data[id][f.k] === "string" ? saved.data[id][f.k] : f.d;
+}
+function applyCalendar(id) {
+  const c = CALENDAR.find(x => x.id === id); if (!c) return;
+  state.cal = id; delete state.sticker.sante;
+  Object.assign(state.data.sante, { eyebrow: c.name, big: c.big, title: c.title, subtitle: c.subtitle, points: c.points });
+}
+if (!saved.data || !saved.data.sante || !saved.data.sante.title) applyCalendar(state.cal);
+const photoIdFor = type => state.photo[type] !== undefined ? state.photo[type] : (TYPES[type].pic || null);
+const bgOf = type => state.bg[type] || TYPES[type].bg;
+const varOf = type => { const i = state.variant[type] | 0; return i >= 0 && i < TYPES[type].v.length ? i : 0; };
+const curCal = () => CALENDAR.find(x => x.id === state.cal) || CALENDAR[0];
+const stickerRec = type => type === "sante" ? curCal().sticker : (STICKER_DEFAULT[type] || "croix");
+const stickerOf = type => state.sticker[type] !== undefined ? state.sticker[type] : stickerRec(type);
+const stickerColor = type => (type === "sante" && curCal().color) || CH.green;
+
+let saveT = 0;
+function persist() { clearTimeout(saveT); saveT = setTimeout(() => store.set("state4", { type: state.type, format: state.format, cal: state.cal, fit: state.fit, bg: state.bg, photo: state.photo, variant: state.variant, sticker: state.sticker, data: state.data }), 300); }
+
+/* ================= Drawing helpers ================= */
+const cv = document.getElementById("cv");
+const ctx = cv.getContext("2d");
+let C = ctx, LX = 32, LW = 476, RICH = { marker: null, color: null }, ALIGN = "left";
+function rgba(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
+function setFont(weight, size, ls = 0, title = false) { C.font = `${weight} ${size}px ${title ? TITLE_F : BODY_F}`; if ("letterSpacing" in C) C.letterSpacing = ls + "px"; }
+function wrapLines(text, maxW) {
+  const out = [];
+  for (const para of String(text || "").split("\n")) {
+    const words = para.split(/\s+/).filter(Boolean); if (!words.length) continue;
+    let line = "";
+    for (const w of words) { const t = line ? line + " " + w : w; if (!line || C.measureText(t).width <= maxW) line = t; else { out.push(line); line = w; } }
+    if (line) out.push(line);
+  }
+  return out;
+}
+/* Text block: wraps, limits lines, optional shrink-to-fit. *mot* = highlighted (yellow marker on light, yellow text on dark) */
+function textBlock(str, o) {
+  const title = !!o.title;
+  let size = o.size;
+  const weight = o.weight || (title ? 800 : 600);
+  const lsOf = sz => o.ls != null ? o.ls : (title ? -sz * 0.025 : 0);
+  setFont(weight, size, lsOf(size), title);
+  const s = o.upper ? String(str || "").toUpperCase() : String(str || "");
+  const rich = s.includes("*") && !o.plain;
+  const plain = s.replace(/\*/g, "");
+  if (o.fit) while (size > 8 && C.measureText(plain).width > o.maxW) { size *= 0.95; setFont(weight, size, lsOf(size), title); }
+  const ls = lsOf(size), lh = size * (o.lh || 1.2);
+  if (rich) return richBlock(s, o, size, weight, ls, lh, title);
+  let lines = wrapLines(plain, o.maxW);
+  if (o.maxLines && lines.length > o.maxLines) { lines = lines.slice(0, o.maxLines); lines[lines.length - 1] = lines[lines.length - 1].replace(/[\s,.;:]*$/, "") + "…"; }
+  const widths = lines.map(l => C.measureText(l).width);
+  const h = lines.length ? (lines.length - 1) * lh + size * (o.tight ? 0.76 : 1.0) : 0;
+  return { h, w: Math.max(0, ...widths), lines,
+    draw(x, y, align = "left") {
+      setFont(weight, size, ls, title); C.fillStyle = o.color; C.textBaseline = "alphabetic";
+      lines.forEach((l, i) => { const lx = align === "right" ? x - widths[i] : align === "center" ? x - widths[i] / 2 : x; C.fillText(l, lx, y + size * 0.78 + i * lh); });
+    } };
+}
+function richBlock(s, o, size, weight, lsF, lh, title) {
+  setFont(weight, size, lsF, title);
+  const space = C.measureText(" ").width;
+  const toks = []; let hl = false;
+  for (const para of s.split("\n")) {
+    for (const raw of para.split(/\s+/).filter(Boolean)) {
+      const segs = []; let cur = "";
+      for (const ch of raw) { if (ch === "*") { if (cur) segs.push({ t: cur, hl }); cur = ""; hl = !hl; } else cur += ch; }
+      if (cur) segs.push({ t: cur, hl });
+      if (!segs.length) continue;
+      segs.forEach(g => g.w = C.measureText(g.t).width);
+      toks.push({ segs, w: segs.reduce((a, g) => a + g.w, 0) });
+    }
+    toks.push({ br: true });
+  }
+  let lines = [], line = [], lw = 0;
+  for (const tk of toks) {
+    if (tk.br) { if (line.length) { lines.push({ t: line, w: lw }); line = []; lw = 0; } continue; }
+    const add = (line.length ? space : 0) + tk.w;
+    if (line.length && lw + add > o.maxW) { lines.push({ t: line, w: lw }); line = [tk]; lw = tk.w; }
+    else { line.push(tk); lw += add; }
+  }
+  if (line.length) lines.push({ t: line, w: lw });
+  if (o.maxLines && lines.length > o.maxLines) lines = lines.slice(0, o.maxLines);
+  const h = lines.length ? (lines.length - 1) * lh + size * (o.tight ? 0.76 : 1.0) : 0;
+  const rich = Object.assign({}, RICH);
+  return { h, w: Math.max(0, ...lines.map(l => l.w)), lines,
+    draw(x, y, align = "left") {
+      setFont(weight, size, lsF, title); C.textBaseline = "alphabetic";
+      lines.forEach((ln, i) => {
+        let cx = align === "right" ? x - ln.w : align === "center" ? x - ln.w / 2 : x;
+        const by = y + size * 0.78 + i * lh;
+        ln.t.forEach((tk, ti) => {
+          tk.segs.forEach((g, gi) => {
+            if (g.hl && rich.marker) {
+              const nextHl = gi === tk.segs.length - 1 && ln.t[ti + 1] && ln.t[ti + 1].segs[0].hl;
+              C.fillStyle = rich.marker; C.fillRect(cx - size * 0.02, by - size * 0.3, g.w + size * 0.04 + (nextHl ? space : 0), size * 0.38);
+            }
+            C.fillStyle = g.hl && rich.color ? rich.color : o.color;
+            C.fillText(g.t, cx, by); cx += g.w;
+          });
+          cx += space;
+        });
+      });
+    } };
+}
+function rr(x, y, w, h, r) {
+  C.beginPath();
+  r = Math.max(0, Math.min(r, w / 2, h / 2));
+  C.moveTo(x + r, y); C.arcTo(x + w, y, x + w, y + h, r); C.arcTo(x + w, y + h, x, y + h, r); C.arcTo(x, y + h, x, y, r); C.arcTo(x, y, x + w, y, r); C.closePath();
+}
+function archPath(x, y, w, h, r) {
+  C.beginPath(); C.moveTo(x, y + h); C.lineTo(x, y + r); C.arcTo(x, y, x + r, y, r); C.lineTo(x + w - r, y); C.arcTo(x + w, y, x + w, y + r, r); C.lineTo(x + w, y + h); C.closePath();
+}
+const gap = (g, flex = 0) => ({ gap: g, flex });
+const lines = s => String(s || "").split("\n").map(x => x.trim()).filter(Boolean);
+const put = (b, align = ALIGN) =>({ h: b.h, draw(y) { b.draw(align === "center" ? LX + LW / 2 : align === "right" ? LX + LW : LX, y, align); } });
+
+/* Icons (24×24 stroke paths, same as the charte board) */
+const IC = {
+  check: "M5 12.5l4.5 4.5L19 7.5",
+  phone: "M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2",
+  pin: "M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21zM14.5 9.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 1 1 5 0",
+  glass: "M6 3h12l-1.5 17a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1zM7 9h10",
+  walk: "M14.8 4.5a1.8 1.8 0 1 1-3.6 0a1.8 1.8 0 1 1 3.6 0M9 21l2.5-6.5L14 17v4M7 12l3-4h4l2.5 3.5H19M11.5 14.5L13 8",
+  moon: "M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z",
+  moonStar: "M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5zM16 3.5v3M14.5 5h3",
+  clock: "M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v5l3 2",
+  chat: "M4 5h16v11H9l-5 4z",
+  truck: "M3 6h11v10H3zM14 9h4l3 3v4h-7M8.8 17.5a1.8 1.8 0 1 1-3.6 0a1.8 1.8 0 1 1 3.6 0M19.3 17.5a1.8 1.8 0 1 1-3.6 0a1.8 1.8 0 1 1 3.6 0",
+  bulb: "M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z",
+  whatsapp: "M4 20l1.3-3.9A8 8 0 1 1 8 19z",
+  quote: "M4 17.5V12c0-3.5 1.8-5.8 5-6.8l.8 1.8C7.8 7.8 7 9 7 11h3v6.5zM14 17.5V12c0-3.5 1.8-5.8 5-6.8l.8 1.8C17.8 7.8 17 9 17 11h3v6.5z",
+  star: "M12 2l2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6z"
+};
+const PATHS = {};
+const pathOf = d => PATHS[d] || (PATHS[d] = new Path2D(d));
+function icon(k, x, y, size, color, lw = 2, fill = false) {
+  C.save(); C.translate(x, y); C.scale(size / 24, size / 24);
+  if (fill) { C.fillStyle = color; C.fill(pathOf(IC[k])); }
+  else { C.strokeStyle = color; C.lineWidth = lw; C.lineCap = "round"; C.lineJoin = "round"; C.stroke(pathOf(IC[k])); }
+  C.restore();
+}
+function fillPath(d, color) { C.fillStyle = color; C.fill(pathOf(d)); }
+
+/* Logo: uploaded image, or the charte mark (green cross + yellow leaf) */
+let logoImg = null;
+const CROSS = "M18 4h12a2 2 0 0 1 2 2v10h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H32v10a2 2 0 0 1-2 2H18a2 2 0 0 1-2-2V32H6a2 2 0 0 1-2-2V18a2 2 0 0 1 2-2h10V6a2 2 0 0 1 2-2z";
+const LEAF = "M27 45c0-10 6-16 18-17 0 11-6 17-18 17z";
+function mark(x, y, size, cross, edge) {
+  C.save(); C.translate(x, y); C.scale(size / 48, size / 48);
+  fillPath(CROSS, cross); fillPath(LEAF, CH.yellow);
+  C.strokeStyle = edge; C.lineWidth = 2.5; C.stroke(pathOf(LEAF));
+  C.restore();
+}
+/* Header: logo always top-left. pill = white label over a photo */
+function header(x, y, T, pill) {
+  const name = String(brand.name || "").toUpperCase();
+  if (logoImg) {
+    const h = pill ? 36 : 44, w = Math.min(180, logoImg.width * h / logoImg.height);
+    if (pill) { C.save(); C.shadowColor = "rgba(0,0,0,.18)"; C.shadowBlur = 16; C.shadowOffsetY = 6; C.fillStyle = "#fff"; rr(x - 10, y, w + 20, h + 14, 16); C.fill(); C.restore(); C.drawImage(logoImg, x, y + 7, w, h); }
+    else C.drawImage(logoImg, x, y - 2, w, h);
+    return;
+  }
+  const ms = pill ? 34 : 40, ns = pill ? 19 : 22, ls = pill ? 9 : 10;
+  setFont(800, ns, -0.4, true); const nw = C.measureText(name).width;
+  setFont(700, ls, 2.5); const lw = C.measureText("PHARMACIE").width;
+  if (pill) {
+    const w = 10 + ms + 10 + Math.max(nw, lw) + 16, h = ms + 16;
+    C.save(); C.shadowColor = "rgba(0,0,0,.18)"; C.shadowBlur = 16; C.shadowOffsetY = 6; C.fillStyle = "#fff"; rr(x - 10, y, w, h, h / 2); C.fill(); C.restore();
+    mark(x, y + 8, ms, CH.green, "#fff");
+    C.fillStyle = CH.green; setFont(700, ls, 2.5); C.fillText("PHARMACIE", x + ms + 10, y + 20);
+    C.fillStyle = CH.deep; setFont(800, ns, -0.4, true); C.fillText(name, x + ms + 10, y + 37);
+    return;
+  }
+  mark(x, y, ms, T.cross, T.bg);
+  C.fillStyle = T.dark ? T.label : CH.green; setFont(700, ls, 2.5); C.fillText("PHARMACIE", x + ms + 10, y + 14);
+  C.fillStyle = T.dark ? "#fff" : CH.deep; setFont(800, ns, -0.4, true); C.fillText(name, x + ms + 10, y + 34);
+}
+/* Contact wave: always at the bottom */
+function footer(U, compact, T) {
+  const wh = compact ? 28 : 40, bh = compact ? 58 : 82, y0 = U - bh - wh;
+  C.save(); C.translate(0, y0);
+  if (compact) { fillPath("M0 28V14C150-3 360-3 540 11v17z", CH.green); fillPath("M0 28V21C150 5 360 5 540 18v10z", T.band); }
+  else { fillPath("M0 40V20C150-4 360-4 540 16v24z", CH.green); fillPath("M0 40V30C150 8 360 8 540 26v14z", T.band); }
+  C.restore();
+  C.fillStyle = T.band; C.fillRect(0, y0 + wh - 0.5, SW, bh + 1);
+  const cy = y0 + wh + bh / 2, px = compact ? 22 : 28;
+  let right = SW - px;
+  const isz = compact ? 20 : 24;
+  if (brand.address) {
+    icon("pin", right - isz, cy - isz / 2, isz, CH.yellow, 2); right -= isz + 8;
+    const ab = textBlock(brand.address, { size: compact ? 11 : 12, weight: 500, color: "#fff", maxW: compact ? 220 : 236, maxLines: 2, lh: 1.32 });
+    ab.draw(right, cy - ab.h / 2, "right");
+  }
+  if (brand.phone) {
+    const ps = compact ? 17 : 21, ls = compact ? 10 : 12;
+    icon("phone", px, cy - isz / 2, isz, CH.yellow, 2);
+    const tx = px + isz + (compact ? 8 : 10), tot = ps * 0.72 + 5 + ls * 0.72, t0 = cy - tot / 2;
+    C.fillStyle = "#fff"; setFont(700, ps, 0.3); C.fillText(brand.phone, tx, t0 + ps * 0.72);
+    C.fillStyle = CH.yellow; setFont(600, ls, 0); C.fillText(brand.whatsapp ? "Appel & WhatsApp" : "Téléphone", tx, t0 + ps * 0.72 + 5 + ls * 0.72);
+  }
+}
+/* Wave closing a photo band (green line + page colour) */
+function waveBottom(yb, h, under) {
+  C.save(); C.translate(0, yb - h); C.scale(1, h / 50);
+  fillPath("M0 50V24C160 0 380 0 540 22v28z", CH.green); fillPath("M0 50V34C160 12 380 12 540 32v18z", under);
+  C.restore();
+}
+/* Photos */
+function coverDraw(g, img, x, y, w, h, fx = 0.5, fy = 0.4) {
+  const ir = img.width / img.height, br = w / h;
+  let sw = img.width, sh = img.height, sx = 0, sy = 0;
+  if (ir > br) { sw = img.height * br; sx = (img.width - sw) * fx; } else { sh = img.width / br; sy = (img.height - sh) * fy; }
+  g.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+}
+function containDraw(img, x, y, w, h, padK = 0.07) {
+  const pad = Math.min(w, h) * padK, ir = img.width / img.height;
+  let dw = w - pad * 2, dh = dw / ir;
+  if (dh > h - pad * 2) { dh = h - pad * 2; dw = dh * ir; }
+  C.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+}
+function blurFill(img, x, y, w, h, dark) { // cheap blur that works everywhere: tiny copy, smoothly enlarged
+  const t = document.createElement("canvas"); t.width = 36; t.height = Math.max(1, Math.round(36 * h / w));
+  coverDraw(t.getContext("2d"), img, 0, 0, t.width, t.height, 0.5, 0.5);
+  C.save(); C.imageSmoothingEnabled = true; C.imageSmoothingQuality = "high"; C.drawImage(t, x - 20, y - 20, w + 40, h + 40);
+  if (dark) { C.fillStyle = `rgba(0,0,0,${dark})`; C.fillRect(x, y, w, h); }
+  C.restore();
+}
+let PH = null;
+function placeholderImg() {
+  if (PH) return PH;
+  const c = document.createElement("canvas"); c.width = 900; c.height = 900;
+  const g = c.getContext("2d");
+  g.fillStyle = CH.pale; g.fillRect(0, 0, 900, 900);
+  g.fillStyle = rgba(CH.green, 0.12);
+  for (let y = 45, row = 0; y < 960; y += 90, row++) for (let x = row % 2 ? 45 : 0; x < 960; x += 90) { g.fillRect(x - 18, y - 6, 36, 12); g.fillRect(x - 6, y - 18, 12, 36); }
+  g.fillStyle = CH.green; g.font = `700 52px ${BODY_F}`; g.textAlign = "center"; g.fillText("Ajoutez une photo ＋", 450, 465);
+  return (PH = c);
+}
+function macaron(cx, cy, r, txt) {
+  C.save(); C.translate(cx, cy); C.rotate(-8 * Math.PI / 180);
+  C.shadowColor = "rgba(0,0,0,.25)"; C.shadowBlur = 20; C.shadowOffsetY = 8;
+  C.fillStyle = "#fff"; C.beginPath(); C.arc(0, 0, r, 0, Math.PI * 2); C.fill();
+  C.shadowColor = "transparent";
+  C.fillStyle = CH.yellow; C.beginPath(); C.arc(0, 0, r * 0.92, 0, Math.PI * 2); C.fill();
+  icon("check", -r * 0.17, -r * 0.52, r * 0.34, CH.deep, 2.8);
+  const t1 = textBlock(txt, { title: true, size: r * 0.27, color: CH.deep, maxW: r * 1.55, maxLines: 1, fit: true, tight: true, upper: true, ls: -0.3 });
+  t1.draw(0, -r * 0.08, "center");
+  const t2 = textBlock("chez " + (brand.name || "nous"), { size: r * 0.15, weight: 600, color: CH.deep, maxW: r * 1.5, maxLines: 1, fit: true, tight: true });
+  t2.draw(0, r * 0.26, "center");
+  C.restore();
+}
+
+/* ================= Stickers =================
+   Flat illustrations in a 100×100 box. Colour keys: m = colour of the day (or charte green), d = deep green,
+   w = white, y = yellow, g = charte green. Parts: d (SVG path), c [x,y,r], e [x,y,rx,ry,deg], r [x,y,w,h,radius], t (text). */
+const HEART = "M50 88C22 70 8 54 8 36A21 21 0 0 1 50 26A21 21 0 0 1 92 36C92 54 78 70 50 88Z";
+const DROP = "M50 8C50 8 20 44 20 62A30 30 0 0 0 80 62C80 44 50 8 50 8Z";
+const STICKERS = {
+  coeur: { n: "Cœur", p: [{ d: HEART, f: "m" }, { d: "M14 50H33L40 37L48 63L56 41L61 50H86", s: "w", w: 5 }] },
+  ruban: { n: "Ruban", p: [{ d: "M44 46L68 90", s: "m", w: 14, cap: "butt" }, { d: "M32 90L56 46C64 31 62 12 50 12C38 12 36 31 44 46", s: "m", w: 14, cap: "butt" }] },
+  moustique: { n: "Moustique", p: [{ e: [44, 36, 17, 8, -35], f: "w", s: "d", w: 3 }, { e: [58, 31, 15, 7, -70], f: "w", s: "d", w: 3 }, { d: "M30 64L68 44", s: "d", w: 11 }, { c: [73, 41, 6], f: "d" }, { d: "M77 38L92 28", s: "d", w: 3 }, { d: "M44 57L36 74L30 78M52 53L50 74L46 82M60 49L68 70L74 74", s: "d", w: 3 }, { c: [50, 50, 44], s: "m", w: 7 }, { d: "M19 19L81 81", s: "m", w: 7 }] },
+  savon: { n: "Savon", p: [{ r: [14, 48, 62, 34, 13], f: "m" }, { r: [22, 54, 30, 8, 4], f: "w", a: 0.55 }, { c: [70, 30, 13], f: "w", s: "m", w: 4 }, { c: [46, 24, 8], f: "w", s: "m", w: 4 }, { c: [86, 56, 7], f: "w", s: "m", w: 3 }] },
+  goutte: { n: "Goutte", p: [{ d: DROP, f: "m" }, { e: [38, 62, 5, 10, -20], f: "w", a: 0.7 }] },
+  drepano: { n: "Globule", p: [{ d: DROP, f: "m" }, { d: "M34 60A16 16 0 0 0 66 60A21 21 0 0 1 34 60Z", f: "w" }] },
+  tension: { n: "Tension", p: [{ d: "M50 16V6", s: "d", w: 4 }, { c: [50, 54, 38], f: "w", s: "d", w: 5 }, { d: "M26 60A24 24 0 0 1 74 60", s: "m", w: 8 }, { d: "M50 60L64 40", s: "d", w: 5 }, { c: [50, 60, 6], f: "d" }, { d: "M43 76H57", s: "d", w: 4 }] },
+  tabac: { n: "Sans tabac", p: [{ r: [16, 44, 48, 14, 3], f: "w", s: "d", w: 3 }, { r: [64, 44, 20, 14, 3], f: "y", s: "d", w: 3 }, { d: "M24 36C20 30 28 26 24 18", s: "d", w: 3 }, { c: [50, 50, 42], s: "m", w: 8 }, { d: "M20 20L80 80", s: "m", w: 8 }] },
+  poumons: { n: "Poumons", p: [{ d: "M50 40C46 44 44 46 44 54V80C44 88 36 90 28 88C18 86 14 76 14 64C14 46 22 30 34 28C40 27 44 32 44 40Z", f: "m" }, { d: "M50 40C54 44 56 46 56 54V80C56 88 64 90 72 88C82 86 86 76 86 64C86 46 78 30 66 28C60 27 56 32 56 40Z", f: "m" }, { d: "M50 10V44M50 44L40 54M50 44L60 54", s: "d", w: 5 }] },
+  foie: { n: "Foie", p: [{ d: "M12 46C12 30 30 24 52 26C72 28 90 22 90 38C90 52 74 60 56 70C40 79 26 84 18 76C12 70 12 58 12 46Z", f: "m" }, { d: "M54 28C50 42 52 56 60 66", s: "w", w: 4, a: 0.6 }] },
+  tete: { n: "Moral", p: [{ d: "M34 90V74C22 68 16 56 16 44C16 24 32 10 52 10C70 10 84 22 84 38C84 42 86 46 90 52L84 56V66C84 70 80 73 76 73H66V90Z", f: "m" }, { d: "M50 56C40 49 34 44 34 37A8 8 0 0 1 50 33A8 8 0 0 1 66 37C66 44 60 49 50 56Z", f: "w" }] },
+  moustache: { n: "Moustache", p: [{ d: "M50 50C44 40 30 38 22 44C16 48 14 56 6 56C12 66 28 68 38 62C44 58 48 54 50 50C52 54 56 58 62 62C72 68 88 66 94 56C86 56 84 48 78 44C70 38 56 40 50 50Z", f: "m" }] },
+  diabete: { n: "Cercle bleu", p: [{ c: [50, 50, 32], s: "m", w: 13 }, { d: "M50 36C50 36 41 47 41 54A9 9 0 0 0 59 54C59 47 50 36 50 36Z", f: "m" }] },
+  seringue: { n: "Seringue", rot: -40, p: [{ d: "M74 50H95", s: "d", w: 3 }, { r: [28, 40, 40, 20, 4], f: "w", s: "d", w: 4 }, { r: [44, 44, 22, 12, 2], f: "m" }, { d: "M40 40V46M48 40V46M56 40V46", s: "d", w: 2 }, { d: "M68 44H75V56H68Z", f: "d" }, { d: "M28 32V68", s: "d", w: 5 }, { d: "M28 50H12M12 40V60", s: "d", w: 5 }] },
+  gelule: { n: "Médicament", p: [{ r: [16, 38, 66, 26, 13], f: "w", rot: -35 }, { d: "M49 38H29A13 13 0 0 0 29 64H49Z", f: "m", rot: -35 }, { r: [16, 38, 66, 26, 13], s: "d", w: 4, rot: -35 }, { c: [74, 76, 10], f: "y", s: "d", w: 3 }, { d: "M68 76H80", s: "d", w: 3 }] },
+  stetho: { n: "Stéthoscope", p: [{ d: "M30 14V38A18 18 0 0 0 66 38V14", s: "d", w: 5 }, { d: "M48 56V72A14 14 0 0 0 76 72V64", s: "d", w: 5 }, { c: [76, 56, 10], f: "m", s: "d", w: 4 }, { c: [30, 14, 5], f: "d" }, { c: [66, 14, 5], f: "d" }] },
+  thermo: { n: "Fièvre", p: [{ r: [42, 8, 16, 62, 8], f: "w", s: "d", w: 4 }, { c: [50, 76, 13], f: "m", s: "d", w: 4 }, { r: [46, 32, 8, 42, 4], f: "m" }, { d: "M62 20H68M62 30H68M62 40H68", s: "d", w: 3 }] },
+  bouclier: { n: "Protection", p: [{ d: "M50 10L84 22V46C84 68 70 82 50 90C30 82 16 68 16 46V22Z", f: "m" }, { d: "M34 50L46 62L68 38", s: "w", w: 7 }] },
+  pomme: { n: "Alimentation", p: [{ d: "M50 34C42 26 18 26 18 52C18 72 32 88 42 88C46 88 47 86 50 86C53 86 54 88 58 88C68 88 82 72 82 52C82 26 58 26 50 34Z", f: "m" }, { d: "M50 34C50 26 48 20 44 14", s: "d", w: 4 }, { d: "M52 26C52 16 60 10 72 10C72 20 64 26 52 26Z", f: "g" }, { e: [32, 50, 4, 9, 15], f: "w", a: 0.5 }] },
+  eau: { n: "Eau", p: [{ d: "M28 16H72L66 88H34Z", f: "w" }, { d: "M31 44H69L66 88H34Z", f: "m", a: 0.85 }, { d: "M28 16H72L66 88H34Z", s: "d", w: 4 }, { e: [42, 64, 3, 9, 0], f: "w", a: 0.6 }] },
+  biberon: { n: "Bébé", p: [{ d: "M44 22C44 14 47 8 50 8C53 8 56 14 56 22Z", f: "y", s: "d", w: 3 }, { d: "M38 32L42 22H58L62 32Z", f: "y", s: "d", w: 3 }, { r: [34, 32, 32, 58, 10], f: "w", s: "d", w: 4 }, { r: [37, 56, 26, 31, 7], f: "m", a: 0.85 }, { d: "M34 46H44M34 56H44", s: "d", w: 3 }] },
+  ampoule: { n: "Idée", p: [{ d: "M16 38H8M84 38H92M22 14L16 8M78 14L84 8", s: "m", w: 4 }, { d: "M50 10A28 28 0 0 0 34 61C37 64 38 67 38 72H62C62 67 63 64 66 61A28 28 0 0 0 50 10Z", f: "y", s: "d", w: 4 }, { d: "M40 80H60M42 88H58", s: "d", w: 5 }, { d: "M44 50L50 58L56 50V72M50 58V72", s: "d", w: 3 }] },
+  megaphone: { n: "Annonce", p: [{ d: "M14 42V58H28L62 76V24L28 42Z", f: "m", s: "m", w: 4 }, { d: "M28 58L34 80H44L40 60Z", f: "d" }, { d: "M72 38A14 14 0 0 1 72 62", s: "m", w: 5 }, { d: "M80 28A26 26 0 0 1 80 72", s: "m", w: 5 }] },
+  question: { n: "Question", p: [{ t: "?", x: 50, y: 52, size: 100, f: "m" }] },
+  vraifaux: { n: "Vrai / faux", p: [{ c: [30, 50, 22], f: "g" }, { d: "M20 50L28 58L41 43", s: "w", w: 6 }, { c: [70, 50, 22], f: "d" }, { d: "M62 42L78 58M78 42L62 58", s: "w", w: 6 }] },
+  lune: { n: "Nuit", p: [{ d: "M72 64A32 32 0 1 1 40 16A26 26 0 0 0 72 64Z", f: "m" }, { d: "M72 12L76 24L88 28L76 32L72 44L68 32L56 28L68 24Z", f: "y" }] },
+  calendrier: { n: "Date", p: [{ r: [16, 20, 68, 64, 10], f: "w", s: "d", w: 4 }, { d: "M16 38V30A10 10 0 0 1 26 20H74A10 10 0 0 1 84 30V38Z", f: "m" }, { d: "M34 12V26M66 12V26", s: "d", w: 5 }, { t: "1", x: 50, y: 62, size: 30, f: "d" }] },
+  croix: { n: "Pharmacie", p: [{ d: "M38 12H62V38H88V62H62V88H38V62H12V38H38Z", f: "g", s: "g", w: 6 }] }
+};
+const EMOJIS = ["❤️", "🫀", "🫁", "🧠", "🩸", "💉", "💊", "🩺", "🦟", "🧼", "🍎", "💧", "🎗️", "🚭", "🤰🏾", "👶🏾", "👴🏾", "☀️", "🌙", "⭐"];
+const EMOJI_F = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+let ownStickers = store.get("stickers", []); // [{id, src}]
+const stickerImgs = new Map();
+function stickerImage(id) {
+  if (stickerImgs.has(id)) return stickerImgs.get(id);
+  const rec = ownStickers.find(x => x.id === id); if (!rec) return null;
+  const im = new Image(); im.onload = () => schedule(); im.src = rec.src; stickerImgs.set(id, im); return im;
+}
+function partPath(p) {
+  if (p._p) return p._p;
+  let P;
+  if (p.d) P = new Path2D(p.d);
+  else { P = new Path2D();
+    if (p.c) P.arc(p.c[0], p.c[1], p.c[2], 0, Math.PI * 2);
+    else if (p.e) P.ellipse(p.e[0], p.e[1], p.e[2], p.e[3], p.e[4] * Math.PI / 180, 0, Math.PI * 2);
+    else if (p.r) { const [x, y, w, h, r] = p.r; P.moveTo(x + r, y); P.arcTo(x + w, y, x + w, y + h, r); P.arcTo(x + w, y + h, x, y + h, r); P.arcTo(x, y + h, x, y, r); P.arcTo(x, y, x + w, y, r); P.closePath(); }
+  }
+  return (p._p = P);
+}
+function stickerArt(def, col) {
+  const K = { m: col, d: CH.deep, w: "#fff", y: CH.yellow, g: CH.green };
+  if (def.rot) { C.translate(50, 50); C.rotate(def.rot * Math.PI / 180); C.translate(-50, -50); }
+  for (const p of def.p) {
+    C.save(); C.globalAlpha = p.a || 1;
+    if (p.rot) { C.translate(50, 50); C.rotate(p.rot * Math.PI / 180); C.translate(-50, -50); }
+    if (p.t) { C.fillStyle = K[p.f]; C.font = `800 ${p.size}px ${TITLE_F}`; if ("letterSpacing" in C) C.letterSpacing = "0px"; C.textAlign = "center"; C.textBaseline = "middle"; C.fillText(p.t, p.x, p.y + p.size * 0.04); C.restore(); continue; }
+    const P = partPath(p);
+    if (p.f) { C.fillStyle = K[p.f]; C.fill(P); }
+    if (p.s) { C.strokeStyle = K[p.s]; C.lineWidth = p.w || 3; C.lineCap = p.cap || "round"; C.lineJoin = "round"; C.stroke(P); }
+    C.restore();
+  }
+}
+/* Die-cut sticker: white disc with a soft shadow, tinted inside, illustration / emoji / own image on top */
+function drawSticker(sid, cx, cy, r, col, o = {}) {
+  if (!sid || sid === "none") return;
+  C.save();
+  if (!o.flat) { C.shadowColor = "rgba(0,0,0,.2)"; C.shadowBlur = r * 0.35; C.shadowOffsetY = r * 0.1; }
+  C.fillStyle = "#fff"; C.beginPath(); C.arc(cx, cy, r, 0, Math.PI * 2); C.fill();
+  C.shadowColor = "transparent";
+  C.fillStyle = rgba(col, 0.12); C.beginPath(); C.arc(cx, cy, r * 0.88, 0, Math.PI * 2); C.fill();
+  if (sid.startsWith("emo:")) {
+    const sz = r * 1.02; C.font = `${sz}px ${EMOJI_F}`; if ("letterSpacing" in C) C.letterSpacing = "0px"; C.textAlign = "center"; C.textBaseline = "middle"; C.fillStyle = CH.deep;
+    C.fillText(sid.slice(4), cx, cy + sz * 0.06);
+  } else if (sid.startsWith("img:")) {
+    const im = stickerImage(sid);
+    if (im && im.complete && im.naturalWidth) { C.beginPath(); C.arc(cx, cy, r * 0.88, 0, Math.PI * 2); C.clip(); containDraw(im, cx - r * 0.8, cy - r * 0.8, r * 1.6, r * 1.6, 0.04); }
+  } else {
+    const def = STICKERS[sid]; if (def) { const k = r * 1.24 / 100; C.translate(cx - r * 0.62, cy - r * 0.62); C.scale(k, k); stickerArt(def, col); }
+  }
+  C.restore(); C.textAlign = "left"; C.textBaseline = "alphabetic";
+}
+
+/* ================= Content builders (540-wide units, s = scale) ================= */
+function pillBox(text, o) {
+  const isz = o.icon ? (o.iconSize || o.size * 1.3) : 0, ig = o.icon ? o.size * 0.5 : 0;
+  const tb = textBlock(text, { size: o.size, weight: o.weight || 800, title: o.title, color: o.fg, maxW: (o.maxW || LW) - o.padX * 2 - isz - ig, maxLines: 1, upper: o.upper, ls: o.ls, tight: true, fit: true, plain: true });
+  const w = o.padX * 2 + isz + ig + tb.w, h = Math.max(tb.h, isz) + o.padY * 2;
+  return { w, h, draw(x, y) {
+    const rad = o.radius != null ? o.radius : h / 2;
+    if (o.bg) { C.fillStyle = o.bg; rr(x, y, w, h, rad); C.fill(); }
+    if (o.stroke) { C.strokeStyle = o.stroke; C.lineWidth = o.strokeW || 3; rr(x, y, w, h, rad); C.stroke(); }
+    if (o.icon) icon(o.icon, x + o.padX, y + (h - isz) / 2, isz, o.iconColor || o.fg, o.iconW || 2.2);
+    tb.draw(x + o.padX + isz + ig, y + (h - tb.h) / 2);
+  } };
+}
+const placeBox = (b, align = ALIGN) =>({ h: b.h, draw(y) { b.draw(align === "center" ? LX + (LW - b.w) / 2 : LX, y); } });
+function checklist(pts, c, o = {}) {
+  const s = c.s, isz = 20 * s, size = (o.size || 15) * s, maxW = o.maxW || LW, out = [];
+  const bs = pts.map(p => textBlock(p, { size, weight: 600, color: o.color || c.T.ink, maxW: maxW - isz - 8 * s, maxLines: 2, lh: 1.25 }));
+  const gw = Math.max(0, ...bs.map(b => b.w)) + isz + 8 * s, x0 = ALIGN === "center" ? LX + Math.max(0, (LW - gw) / 2) : LX;
+  bs.forEach((b, i) => {
+    const h = Math.max(b.h, isz);
+    out.push({ h, draw(y) { icon("check", x0, y + (b.lines.length > 1 ? 0 : (h - isz) / 2), isz, o.check || CH.green, 2.6); b.draw(x0 + isz + 8 * s, y + (b.lines.length > 1 ? 0 : (h - b.h) / 2)); } });
+    if (i < bs.length - 1) out.push(gap((o.g || 9) * s));
+  });
+  return out;
+}
+function whiteCards(pts, c, numbered) {
+  const s = c.s, out = [], pad = 13 * s, isz = numbered ? 34 * s : 26 * s;
+  pts.forEach((p, i) => {
+    const tb = textBlock(p, { size: 16 * s, weight: 600, color: CH.deep, maxW: LW - pad * 2 - isz - 14 * s, maxLines: 2, lh: 1.25 });
+    const h = Math.max(tb.h, isz) + pad * 2;
+    out.push({ h, draw(y) {
+      C.fillStyle = "#fff"; rr(LX, y, LW, h, 14 * s); C.fill();
+      if (numbered) {
+        C.fillStyle = CH.green; C.beginPath(); C.arc(LX + pad + isz / 2, y + h / 2, isz / 2, 0, Math.PI * 2); C.fill();
+        textBlock(String(i + 1), { title: true, size: 18 * s, color: "#fff", maxW: isz, tight: true }).draw(LX + pad + isz / 2, y + h / 2 - 18 * s * 0.38, "center");
+      } else icon("check", LX + pad, y + (h - isz) / 2, isz, CH.green, 2.4);
+      tb.draw(LX + pad + isz + 14 * s, y + (h - tb.h) / 2);
+    } });
+    if (i < pts.length - 1) out.push(gap(9 * s));
+  });
+  return out;
+}
+function darkButton(text, c, ic = "chat") {
+  const s = c.s, pad = 14 * s, isz = 22 * s;
+  const tb = textBlock(text, { size: 16 * s, weight: 700, color: "#fff", maxW: LW - pad * 2 - isz - 10 * s, maxLines: 2, lh: 1.25 });
+  const h = Math.max(tb.h, isz) + pad * 2;
+  return { h, draw(y) {
+    C.fillStyle = c.T.dark ? CH.deep : CH.deep; rr(LX, y, LW, h, 14 * s); C.fill();
+    const w = isz + 10 * s + tb.w, x0 = LX + (LW - w) / 2;
+    icon(ic, x0, y + (h - isz) / 2, isz, CH.yellow, 2);
+    tb.draw(x0 + isz + 10 * s, y + (h - tb.h) / 2);
+  } };
+}
+
+const BUILD = {
+  produit(d, c) {
+    const { T, s } = c, it = [];
+    if (d.label) it.push(put(textBlock(d.label, { size: 12 * s, weight: 700, color: T.label, upper: true, ls: 2, maxW: LW, maxLines: 1 })), gap(10 * s, 0.3));
+    it.push(put(textBlock(d.title, { title: true, size: 42 * s, color: T.ink, lh: 1.02, maxW: LW, maxLines: 3 })));
+    if (d.subtitle) it.push(gap(12 * s, 0.3), put(textBlock(d.subtitle, { size: 16 * s, weight: 400, color: T.soft, lh: 1.45, maxW: LW, maxLines: 3 })));
+    const chips = [];
+    if (d.price) chips.push(pillBox(d.price, { size: 22 * s, title: true, fg: CH.deep, bg: CH.yellow, padX: 16 * s, padY: 10 * s }));
+    if (d.extra) chips.push(pillBox(d.extra, { size: 15 * s, weight: 700, fg: T.dark ? "#fff" : CH.green, icon: "truck", iconColor: T.dark ? CH.yellow : CH.green, iconSize: 22 * s, padX: 0, padY: 6 * s }));
+    if (chips.length) {
+      const h = Math.max(...chips.map(x => x.h));
+      const cw = chips.reduce((a, ch) => a + ch.w, 0) + 18 * s * (chips.length - 1);
+      it.push(gap(14 * s, 0.6), { h, draw(y) { let x = ALIGN === "center" ? LX + (LW - cw) / 2 : LX; chips.forEach(ch => { ch.draw(x, y + (h - ch.h) / 2); x += ch.w + 18 * s; }); } });
+    }
+    return it;
+  },
+  promo(d, c) {
+    const { T, s } = c, it = [];
+    if (d.badge) it.push(placeBox(pillBox(d.badge, { size: 13 * s, weight: 800, fg: CH.yellow, bg: CH.deep, padX: 15 * s, padY: 8 * s, upper: true, ls: 1.8 })), gap(14 * s, 0.4));
+    it.push(put(textBlock(d.value, { title: true, size: 150 * s, color: T.dark ? CH.yellow : CH.green, lh: 0.9, maxW: c.titleW, maxLines: 1, tight: true, fit: true, ls: -5 * s })));
+    if (d.title) it.push(gap(14 * s, 0.3), put(textBlock(d.title, { title: true, size: 34 * s, color: T.ink, lh: 1.05, maxW: c.titleW, maxLines: 3 })));
+    const pts = lines(d.points).slice(0, 4);
+    if (pts.length) it.push(gap(18 * s, 0.6), ...checklist(pts, c, { maxW: c.lowW, check: T.dark ? CH.yellow : CH.green }));
+    if (d.period) it.push(gap(16 * s, 0.5), placeBox(pillBox(d.period, { size: 20 * s, title: true, fg: T.dark ? CH.deep : "#fff", bg: T.dark ? "#fff" : CH.deep, padX: 16 * s, padY: 11 * s, radius: 14 * s, maxW: c.lowW })));
+    if (d.legal) it.push(gap(10 * s, 0.2), put(textBlock(d.legal, { size: 11 * s, weight: 400, color: T.soft, lh: 1.4, maxW: c.lowW, maxLines: 3 })));
+    return it;
+  },
+  ouvert(d, c) {
+    const { T, s } = c, it = [];
+    if (d.lead) it.push(put(textBlock(d.lead, { title: true, weight: 700, size: 30 * s, color: T.dark ? CH.light : CH.green, lh: 1, maxW: c.colW + 30, maxLines: 2 })), gap(4 * s));
+    it.push(put(textBlock(d.title, { title: true, size: 86 * s, color: T.ink, lh: 0.92, maxW: c.titleW, maxLines: 2, ls: -3 * s })));
+    if (d.hours || d.days) {
+      const pad = 14 * s;
+      const a = d.days ? textBlock(d.days, { size: 11 * s, weight: 700, color: CH.yellow, upper: true, ls: 2, maxW: c.colW - pad * 2, maxLines: 1, tight: true }) : null;
+      const b = d.hours ? textBlock(d.hours, { title: true, size: 26 * s, color: "#fff", maxW: c.colW - pad * 2, maxLines: 1, fit: true, tight: true }) : null;
+      const n = d.note ? textBlock(d.note, { size: 12 * s, weight: 500, color: "#CFE8D3", maxW: c.colW - pad * 2, maxLines: 2, lh: 1.3 }) : null;
+      const parts = [a, b, n].filter(Boolean), gg = 7 * s;
+      const h = pad * 2 + parts.reduce((x, p) => x + p.h, 0) + gg * (parts.length - 1), w = Math.min(c.colW, Math.max(...parts.map(p => p.w)) + pad * 2);
+      it.push(gap(18 * s, 0.5), { h, draw(y) { C.fillStyle = CH.deep; rr(LX, y, w, h, 16 * s); C.fill(); let yy = y + pad; parts.forEach(p => { p.draw(LX + pad, yy); yy += p.h + gg; }); } });
+    }
+    const pts = lines(d.points).slice(0, 5);
+    if (pts.length) it.push(gap(18 * s, 0.6), ...checklist(pts, c, { maxW: c.colW }));
+    return it;
+  },
+  garde(d, c) {
+    const { T, s } = c, it = [], hl = T.dark ? CH.yellow : CH.green;
+    if (!c.img) it.push({ h: 60 * s, draw(y) { icon("moonStar", LX + LW / 2 - 30 * s, y, 60 * s, hl, 1.6); } }, gap(16 * s, 0.4));
+    if (d.lead) it.push(put(textBlock(d.lead, { size: 19 * s, weight: 600, color: T.soft, maxW: LW, maxLines: 2 }), "center"), gap(6 * s));
+    it.push(put(textBlock(d.title, { title: true, size: 104 * s, color: hl, lh: 0.9, maxW: LW, maxLines: 1, tight: true, fit: true, ls: -3 * s }), "center"));
+    if (d.big) it.push(gap(20 * s, 0.5), placeBox(pillBox(d.big, { size: 56 * s, title: true, fg: T.ink, stroke: CH.green, strokeW: 3, icon: "clock", iconColor: T.ink, iconSize: 40 * s, padX: 24 * s, padY: 12 * s }), "center"));
+    if (d.period) {
+      const pad = 14 * s, tb = textBlock(d.period, { title: true, size: 28 * s, color: "#fff", maxW: LW - pad * 2, maxLines: 2, lh: 1.1 });
+      const lab = textBlock("Période", { size: 11 * s, weight: 700, color: "#E9F6EB", upper: true, ls: 2, maxW: LW, tight: true });
+      const h = pad * 2 + lab.h + 8 * s + tb.h;
+      it.push(gap(20 * s, 0.5), { h, draw(y) { C.fillStyle = CH.green; rr(LX, y, LW, h, 16 * s); C.fill(); lab.draw(LX + LW / 2, y + pad, "center"); tb.draw(LX + LW / 2, y + pad + lab.h + 8 * s, "center"); } });
+    }
+    if (d.note) it.push(gap(16 * s, 0.4), put(textBlock(d.note, { size: 15 * s, weight: 400, color: T.soft, lh: 1.45, maxW: LW * 0.92, maxLines: 3 }), "center"));
+    return it;
+  },
+  sante(d, c) {
+    const { T, s } = c, it = [], F = c.frame, cen = ALIGN === "center";
+    if (F !== "band") {
+      const pill = d.big && F === "own" ? pillBox(d.big, { size: 13 * s, weight: 800, fg: T.dark ? CH.deep : "#fff", bg: T.dark ? CH.yellow : CH.green, padX: 11 * s, padY: 7 * s, upper: true, ls: 1 }) : null;
+      const tb = d.eyebrow ? textBlock(d.eyebrow, { size: 12 * s, weight: 700, color: T.label, upper: true, ls: 1.8, maxW: LW - (pill ? pill.w + 10 * s : 0), maxLines: 2, lh: 1.3 }) : null;
+      if (pill || tb) {
+        const h = Math.max(tb ? tb.h : 0, pill ? pill.h : 0), w = (pill ? pill.w + (tb ? 10 * s : 0) : 0) + (tb ? tb.w : 0);
+        it.push({ h, draw(y) { let x = cen ? LX + (LW - w) / 2 : LX; if (pill) { pill.draw(x, y + (h - pill.h) / 2); x += pill.w + 10 * s; } if (tb) tb.draw(x, y + (h - tb.h) / 2); } }, gap(16 * s, 0.4));
+      }
+    }
+    it.push(put(textBlock(d.title, { title: true, size: (cen ? 50 : 56) * s, color: T.ink, lh: 0.98, maxW: LW, maxLines: 4, ls: -1.5 * s })));
+    if (d.subtitle) it.push(gap(14 * s, 0.3), put(textBlock(d.subtitle, { size: 17 * s, weight: 400, color: T.soft, lh: 1.45, maxW: LW, maxLines: 3 })));
+    const pts = lines(d.points).slice(0, 4);
+    if (pts.length) it.push(gap(20 * s, 0.8), ...(cen ? checklist(pts, c, { size: 16, check: T.dark ? CH.yellow : CH.green }) : whiteCards(pts, c, false)));
+    if (d.cta) it.push(gap(16 * s, 0.6), darkButton(d.cta, c));
+    return it;
+  },
+  conseil(d, c) {
+    const { T, s } = c, it = [], hl = T.dark ? CH.yellow : CH.green;
+    if (d.badge) it.push(placeBox(pillBox(d.badge, { size: 14 * s, weight: 800, fg: CH.deep, bg: CH.yellow, icon: "bulb", iconColor: CH.deep, iconSize: 20 * s, padX: 16 * s, padY: 8 * s, upper: true, ls: 1.5 })), gap(18 * s, 0.4));
+    if (d.big) it.push(put(textBlock(d.big, { title: true, size: 112 * s, color: hl, lh: 0.88, maxW: LW, maxLines: 1, tight: true, fit: true, ls: -4 * s })));
+    if (d.unit) it.push(gap(10 * s), put(textBlock(d.unit, { title: true, size: 60 * s, color: T.ink, lh: 0.95, maxW: LW, maxLines: 1, tight: true, fit: true })));
+    if (d.title) it.push(gap(16 * s, 0.3), put(textBlock(d.title, { size: 21 * s, weight: 600, color: T.ink, lh: 1.35, maxW: LW, maxLines: 3 })));
+    const pts = lines(d.points).slice(0, 4);
+    if (pts.length) it.push(gap(18 * s, 0.8), ...whiteCards(pts, c, true));
+    if (d.note) it.push(gap(14 * s, 0.5), put(textBlock(d.note, { size: 15 * s, weight: 400, color: T.soft, lh: 1.4, maxW: LW, maxLines: 2 })));
+    return it;
+  },
+  mythe(d, c) {
+    const { T, s } = c, it = [];
+    it.push(put(textBlock(d.title, { title: true, size: 78 * s, color: T.ink, lh: 0.95, maxW: LW, maxLines: 2, ls: -2.5 * s })));
+    if (d.claim) {
+      const pad = 22 * s, qs = 32 * s;
+      const tb = textBlock(d.claim, { title: true, weight: 700, size: 28 * s, color: CH.deep, lh: 1.15, maxW: LW - pad * 2, maxLines: 4 });
+      const st = d.verdict ? pillBox(d.verdict, { size: 30 * s, title: true, fg: CH.yellow, bg: CH.deep, padX: 18 * s, padY: 9 * s, radius: 12 * s, stroke: "#fff", strokeW: 4 }) : null;
+      const ch = pad * 2 + qs + 8 * s + tb.h, over = st ? st.h * 0.6 : 0;
+      it.push(gap(20 * s, 0.6), { h: ch + over, draw(y) {
+        C.fillStyle = T.dark ? "#fff" : CH.pale; rr(LX, y, LW, ch, 20 * s); C.fill();
+        icon("quote", LX + pad - 4 * s, y + pad, qs, CH.green, 0, true);
+        tb.draw(LX + pad, y + pad + qs + 8 * s);
+        if (st) { C.save(); C.translate(LX + LW - 18 * s - st.w / 2, y + ch - st.h * 0.1); C.rotate(-6 * Math.PI / 180); st.draw(-st.w / 2, -st.h / 2); C.restore(); }
+      } });
+    }
+    if (d.answer) it.push(gap(18 * s, 0.6), put(textBlock(d.answer, { size: 19 * s, weight: 700, color: T.ink, lh: 1.35, maxW: LW, maxLines: 3 })));
+    if (d.body) it.push(gap(8 * s), put(textBlock(d.body, { size: 16 * s, weight: 400, color: T.soft, lh: 1.45, maxW: LW, maxLines: 4 })));
+    if (d.cta) {
+      const pad = 13 * s, isz = 24 * s, tb = textBlock(d.cta, { size: 15 * s, weight: 600, color: T.ink, maxW: LW - pad * 2 - isz - 10 * s, maxLines: 2, lh: 1.3 });
+      const h = Math.max(tb.h, isz) + pad * 2;
+      it.push(gap(18 * s, 0.6), { h, draw(y) { C.save(); C.setLineDash([6 * s, 5 * s]); C.strokeStyle = T.dark ? CH.yellow : CH.green; C.lineWidth = 2; rr(LX + 1, y + 1, LW - 2, h - 2, 14 * s); C.stroke(); C.restore(); icon("chat", LX + pad, y + (h - isz) / 2, isz, T.dark ? CH.yellow : CH.green, 2); tb.draw(LX + pad + isz + 10 * s, y + (h - tb.h) / 2); } });
+    }
+    return it;
+  },
+  question(d, c) {
+    const { T, s } = c, it = [];
+    if (d.label) it.push(put(textBlock(d.label, { size: 13 * s, weight: 700, color: T.label, upper: true, ls: 2, maxW: LW, maxLines: 1 })), gap(10 * s, 0.3));
+    it.push(put(textBlock(d.title, { title: true, size: 52 * s, color: T.ink, lh: 0.98, maxW: LW, maxLines: 3, ls: -1.5 * s })));
+    if (d.subtitle) it.push(gap(12 * s, 0.4), put(textBlock(d.subtitle, { size: 17 * s, weight: 400, color: T.soft, lh: 1.45, maxW: LW, maxLines: 4 })));
+    if (d.cta) it.push(gap(16 * s, 0.6), placeBox(pillBox(d.cta, { size: 16 * s, weight: 700, fg: "#fff", bg: CH.green, icon: "whatsapp", iconColor: "#fff", iconSize: 22 * s, padX: 20 * s, padY: 12 * s })));
+    return it;
+  },
+  mois(d, c) {
+    const { T, s } = c, it = [];
+    if (d.lead) it.push(put(textBlock(d.lead, { title: true, weight: 700, size: 32 * s, color: T.dark ? CH.yellow : CH.green, maxW: LW, maxLines: 1, tight: true })), gap(10 * s));
+    it.push(put(textBlock(d.title, { title: true, size: 78 * s, color: T.ink, lh: 0.9, maxW: LW, maxLines: 1, fit: true, tight: true, ls: -2.5 * s })));
+    if (d.tile) {
+      const tw = 150 * s, band = 36 * s, num = 84 * s, th = band + num * 1.15 + 6 * s;
+      it.push(gap(4 * s), { h: th + 10 * s, draw(y) {
+        C.save(); C.translate(ALIGN === "center" ? LX + LW / 2 : LX + LW - tw / 2 - 8 * s, y + 5 * s + th / 2); C.rotate((ALIGN === "center" ? -4 : 5) * Math.PI / 180);
+        C.shadowColor = "rgba(14,75,34,.18)"; C.shadowBlur = 24; C.shadowOffsetY = 10; C.fillStyle = "#fff"; rr(-tw / 2, -th / 2, tw, th, 20 * s); C.fill(); C.shadowColor = "transparent";
+        C.save(); rr(-tw / 2, -th / 2, tw, th, 20 * s); C.clip(); C.fillStyle = CH.green; C.fillRect(-tw / 2, -th / 2, tw, band); C.restore();
+        textBlock(d.tile, { size: 14 * s, weight: 800, color: "#fff", upper: true, ls: 2.5, maxW: tw - 16 * s, maxLines: 1, fit: true, tight: true }).draw(0, -th / 2 + band / 2 - 5 * s, "center");
+        textBlock("01", { title: true, size: num, color: CH.deep, maxW: tw, tight: true }).draw(0, -th / 2 + band + 12 * s, "center");
+        C.restore();
+      } });
+    }
+    if (d.message) it.push(gap(12 * s, 0.4), put(textBlock(d.message, { size: 19 * s, weight: 600, color: T.ink, lh: 1.4, maxW: LW, maxLines: 3 })));
+    const pts = lines(d.points).slice(0, 3);
+    if (pts.length) {
+      const gg = 10 * s, cw = (LW - gg * (pts.length - 1)) / pts.length, isz = 32 * s, pad = 14 * s;
+      const labs = pts.map(p => textBlock(p, { size: 14 * s, weight: 700, color: CH.deep, maxW: cw - 12 * s, maxLines: 2, lh: 1.25 }));
+      const h = pad * 2 + isz + 8 * s + Math.max(...labs.map(l => l.h)), icons = ["glass", "walk", "moon"];
+      it.push(gap(18 * s, 0.6), { h, draw(y) { labs.forEach((l, i) => { const x = LX + i * (cw + gg); C.fillStyle = "#fff"; rr(x, y, cw, h, 16 * s); C.fill(); icon(icons[i % 3], x + (cw - isz) / 2, y + pad, isz, CH.green, 2); l.draw(x + cw / 2, y + pad + isz + 8 * s, "center"); }); } });
+    }
+    if (d.note) it.push(gap(14 * s, 0.4), put(textBlock(d.note, { size: 15 * s, weight: 400, color: T.soft, maxW: LW, maxLines: 2 })));
+    return it;
+  },
+  fete(d, c) {
+    const { T, s } = c, it = [];
+    if (c.frame !== "full") it.push({ h: 120 * s, draw(y) { mark(LX + LW / 2 - 60 * s, y, 120 * s, CH.green, T.bg); } }, gap(22 * s, 0.4));
+    it.push(put(textBlock(d.title, { title: true, size: 82 * s, color: T.ink, lh: 0.94, maxW: LW, maxLines: 3, ls: -2.5 * s }), "center"));
+    if (d.subtitle) it.push(gap(10 * s), put(textBlock(d.subtitle, { title: true, weight: 700, size: 30 * s, color: T.dark ? CH.mint : CH.green, maxW: LW, maxLines: 2 }), "center"));
+    if (d.message) it.push(gap(20 * s, 0.5), put(textBlock(d.message, { size: 18 * s, weight: 400, color: T.soft, lh: 1.5, maxW: LW * 0.94, maxLines: 5 }), "center"));
+    return it;
+  },
+  annonce(d, c) {
+    const { T, s } = c, it = [];
+    if (d.eyebrow) it.push(placeBox(pillBox(d.eyebrow, { size: 13 * s, weight: 800, fg: "#fff", bg: T.dark ? CH.deep : CH.green, padX: 15 * s, padY: 8 * s, upper: true, ls: 1.8 })), gap(16 * s, 0.4));
+    it.push(put(textBlock(d.title, { title: true, size: 54 * s, color: T.ink, lh: 1, maxW: LW, maxLines: 4, ls: -1.5 * s })));
+    if (d.body) it.push(gap(14 * s, 0.3), put(textBlock(d.body, { size: 17 * s, weight: 400, color: T.soft, lh: 1.45, maxW: LW, maxLines: 4 })));
+    const rows = lines(d.rows).slice(0, 7).map(r => { const i = r.indexOf(":"); return i > 0 ? [r.slice(0, i).trim(), r.slice(i + 1).trim()] : [r, ""]; });
+    if (rows.length) {
+      const pad = 18 * s, rg = 10 * s, inner = LW - pad * 2;
+      const rb = rows.map(([a, b]) => {
+        const vb = b ? textBlock(b, { size: 16 * s, weight: 800, color: CH.deep, maxW: inner * 0.55, maxLines: 2 }) : null;
+        const lb = textBlock(a, { size: 15 * s, weight: 600, color: b ? CH.text : CH.deep, maxW: b ? inner - (vb ? vb.w : 0) - 14 * s : inner, maxLines: 2 });
+        return { lb, vb, h: Math.max(lb.h, vb ? vb.h : 0) };
+      });
+      const ch = pad * 2 + rb.reduce((a, r) => a + r.h, 0) + rg * 2 * (rb.length - 1);
+      it.push(gap(22 * s, 0.8), { h: ch, draw(y) {
+        C.fillStyle = "#fff"; rr(LX, y, LW, ch, 16 * s); C.fill();
+        C.fillStyle = CH.yellow; rr(LX + pad, y + pad, 5 * s, ch - pad * 2, 3 * s); C.fill();
+        let yy = y + pad;
+        rb.forEach((r, i) => { r.lb.draw(LX + pad + 14 * s, yy); if (r.vb) r.vb.draw(LX + LW - pad, yy, "right"); yy += r.h; if (i < rb.length - 1) { C.fillStyle = rgba(CH.deep, 0.1); C.fillRect(LX + pad + 14 * s, yy + rg - 0.5, inner - 14 * s, 1); yy += rg * 2; } });
+      } });
+    }
+    return it;
+  }
+};
+
+/* ================= Layout ================= */
+function layout(items, top, bottom, mode) {
+  const avail = bottom - top;
+  const tot = items.reduce((a, it) => a + (it.gap != null ? it.gap : it.h), 0);
+  const extra = Math.max(0, avail - tot);
+  const flexSum = items.reduce((a, it) => a + (it.flex || 0), 0);
+  const used = flexSum && mode !== "bottom" ? extra * (mode === "center" ? 0.5 : 0.7) : 0;
+  let y = top + (extra - used) * (mode === "center" ? 0.5 : mode === "bottom" ? 1 : 0);
+  for (const it of items) {
+    if (it.gap != null) { y += it.gap + (flexSum ? used * (it.flex || 0) / flexSum : 0); continue; }
+    it.draw(y); y += it.h;
+  }
+}
+function fit(build, d, c, avail) {
+  let items;
+  for (let i = 0; i < 40; i++) {
+    items = build(d, c);
+    const tot = items.reduce((a, it) => a + (it.gap != null ? it.gap : it.h), 0);
+    if (tot <= avail) break;
+    c.s *= 0.95;
+  }
+  return items;
+}
+function theme(type) {
+  const t = TYPES[type], kind = bgOf(type) === "vert" ? t.dark : t.light;
+  if (kind === "green" || kind === "deep") {
+    const g = kind === "green";
+    return { kind, dark: true, bg: g ? CH.mid : CH.deep, ink: "#fff", soft: g ? CH.light : "#CFE8D3", label: g ? CH.light : CH.mint, band: g ? CH.deep : CH.deeper, cross: g ? "#fff" : CH.green };
+  }
+  return { kind, dark: false, bg: kind === "pale" ? CH.pale : "#fff", ink: CH.deep, soft: CH.text, label: CH.green, band: CH.deep, cross: CH.green };
+}
+function photoFocus() {
+  const id = photoIdFor(state.type), l = LIB.find(x => x.id === id);
+  return l ? { x: l.x, y: l.y } : { x: 0.5, y: 0.4 };
+}
+
+function stars(U) {
+  const cy = U * 0.36;
+  C.save(); C.setLineDash([2, 10]); C.lineCap = "round"; C.strokeStyle = CH.green; C.lineWidth = 2; C.beginPath(); C.arc(SW / 2, cy, Math.min(170, U * 0.2), 0, Math.PI * 2); C.stroke(); C.restore();
+  [[78, 0.17, 26, CH.yellow], [462, 0.2, 20, CH.yellow], [440, 0.52, 30, CH.green], [100, 0.45, 18, CH.mint]].forEach(([x, k, sz, col]) => icon("star", x - sz / 2, U * k, sz, col, 0, true));
+}
+function draw(target, opts = {}) {
+  const H = FORMATS[opts.format || state.format].h;
+  if (target.width !== W) target.width = W;
+  if (target.height !== H) target.height = H;
+  C = target.getContext("2d"); C.setTransform(K, 0, 0, K, 0, 0);
+  const U = H / K, compact = U < 900, sq = U <= 540;
+  const type = state.type, d = state.data[type];
+  const V = TYPES[type].v[opts.variant != null ? opts.variant : varOf(type)], F = V.f;
+  const T = F === "full" ? { kind: "photo", dark: true, bg: CH.deep, ink: "#fff", soft: "#E6F2E8", label: CH.yellow, band: CH.deep, cross: "#fff" } : theme(type);
+  RICH = T.dark ? { marker: null, color: CH.yellow } : { marker: CH.yellow, color: null };
+  C.fillStyle = T.bg; C.fillRect(0, 0, SW, U);
+  const pad = compact ? 26 : 32, HY = compact ? 20 : 26;
+  LX = pad; LW = SW - pad * 2;
+  ALIGN = F === "center" || F === "medal" ? "center" : "left";
+  const fy = U - (compact ? 86 : 122);
+  const img = V.photo ? photoImg : null, ph = img || placeholderImg(), foc = img ? photoFocus() : { x: 0.5, y: 0.5 };
+  const c = { T, s: sq ? 0.8 : compact ? 0.88 : 1, img, compact, sq, colW: LW, titleW: LW, lowW: LW, frame: F };
+  let top = HY + 40 + (compact ? 16 : 30), mode = "top", build = BUILD[type];
+  const bottom = fy - (compact ? 8 : 16);
+  const stId = V.st ? stickerOf(type) : null, stCol = stickerColor(type), hasSt = stId && stId !== "none";
+
+  if (F === "full") {
+    coverDraw(C, ph, 0, 0, SW, U, foc.x, foc.y);
+    top = Math.round(U * (sq ? 0.3 : compact ? 0.36 : 0.42)); mode = "bottom";
+    const t0 = top / U, g = C.createLinearGradient(0, 0, 0, U);
+    g.addColorStop(0, "rgba(10,58,26,.38)"); g.addColorStop(Math.min(0.16, t0 * 0.4), "rgba(10,58,26,0)"); g.addColorStop(t0 * 0.7, "rgba(10,58,26,.1)");
+    g.addColorStop(t0 + 0.08, "rgba(10,58,26,.8)"); g.addColorStop(Math.min(0.95, t0 + 0.3), "rgba(10,58,26,.92)"); g.addColorStop(1, "rgba(10,58,26,.97)");
+    C.fillStyle = g; C.fillRect(0, 0, SW, U);
+    header(LX + 10, compact ? 14 : 22, T, true);
+    if (type === "produit" && d.badge) { const r = sq ? 40 : compact ? 48 : 64; macaron(SW - (compact ? 22 : 30) - r, (compact ? 14 : 24) + r, r, d.badge); }
+  } else if (F === "top") {
+    const zH = sq ? 190 : compact ? Math.round(U * 0.36) : 380;
+    coverDraw(C, ph, 0, 0, SW, zH, foc.x, foc.y);
+    waveBottom(zH, sq ? 32 : 46, T.bg);
+    header(LX + 10, compact ? 14 : 22, T, true);
+    top = zH + (compact ? 2 : 8);
+  } else if (F === "medal") {
+    header(pad, HY, T);
+    const r = sq ? 70 : compact ? 88 : 128, cx = SW / 2, cy = HY + 44 + (compact ? 12 : 34) + r;
+    C.fillStyle = T.dark ? "rgba(255,255,255,.08)" : rgba(CH.green, 0.1); C.beginPath(); C.arc(cx, cy, r + (compact ? 12 : 18), 0, Math.PI * 2); C.fill();
+    C.save(); C.beginPath(); C.arc(cx, cy, r, 0, Math.PI * 2); C.clip(); coverDraw(C, ph, cx - r, cy - r, 2 * r, 2 * r, foc.x, foc.y); C.restore();
+    C.strokeStyle = CH.green; C.lineWidth = 6; C.beginPath(); C.arc(cx, cy, r - 3, 0, Math.PI * 2); C.stroke();
+    C.save(); C.translate(cx + r * 0.5, cy + r * 0.5); const k = r / 52; C.scale(k, k); C.translate(-27, -28); fillPath(LEAF, CH.yellow); C.strokeStyle = T.bg; C.lineWidth = 2.5 / k * 1.5; C.stroke(pathOf(LEAF)); C.restore();
+    if (type === "produit" && d.badge) { const rm = sq ? 32 : compact ? 38 : 50; macaron(cx - r * 0.86, cy - r * 0.5, rm, d.badge); }
+    top = cy + r + (compact ? 12 : 26); mode = "center";
+  } else if (F === "center") {
+    if (T.dark && type === "garde") stars(U);
+    header(pad, HY, T); mode = "center";
+    if (hasSt) {
+      const base = build;
+      build = (dd, cc) => {
+        const r = (sq ? 62 : compact ? 72 : 92) * cc.s;
+        const pill = type === "sante" && dd.big ? pillBox(dd.big, { size: 15 * cc.s, weight: 800, fg: CH.deep, bg: CH.yellow, padX: 14 * cc.s, padY: 8 * cc.s, upper: true, ls: 1.2 }) : null;
+        const h = 2 * r + (pill ? pill.h * 0.55 : 0) + 6 * cc.s;
+        return [{ h, draw(y) { drawSticker(stId, SW / 2, y + r + 2, r, stCol); if (pill) { C.save(); C.translate(SW / 2, y + 2 * r - pill.h * 0.05); C.rotate(-3 * Math.PI / 180); pill.draw(-pill.w / 2, -pill.h / 2); C.restore(); } } }, gap(18 * cc.s, 0.4), ...base(dd, cc)];
+      };
+    }
+  } else if (F === "band") {
+    const zH = sq ? 200 : compact ? Math.round(U * 0.38) : 400, bc = T.dark ? CH.deep : CH.green;
+    C.fillStyle = bc; C.fillRect(0, 0, SW, zH);
+    const r = sq ? 58 : compact ? 72 : 104, scx = SW - pad - r + 6, a0 = HY + 44, a1 = zH - (sq ? 28 : 42), scy = (a0 + a1) / 2;
+    C.strokeStyle = "rgba(255,255,255,.12)"; C.lineWidth = 2; [1.28, 1.6, 1.95].forEach(m => { C.beginPath(); C.arc(scx, scy, r * m, 0, Math.PI * 2); C.stroke(); });
+    header(pad, HY, { dark: true, label: CH.light, bg: bc, cross: "#fff" });
+    if (hasSt) drawSticker(stId, scx, scy, r, stCol);
+    const lw = scx - r - pad - 16, m = String(d.big || "").trim().match(/^(\d+\w*)\s+(.+)$/i), parts = [];
+    if (m) {
+      parts.push(textBlock(m[1], { title: true, size: sq ? 62 : compact ? 72 : 104, color: "#fff", maxW: lw, maxLines: 1, fit: true, tight: true, ls: -3 }));
+      parts.push(textBlock(m[2], { size: sq ? 14 : compact ? 15 : 19, weight: 800, color: CH.yellow, upper: true, ls: 2, maxW: lw, maxLines: 1, fit: true, tight: true }));
+    } else if (d.big) parts.push(textBlock(d.big, { title: true, size: sq ? 34 : compact ? 40 : 54, color: "#fff", maxW: lw, maxLines: 1, fit: true, tight: true }));
+    if (d.eyebrow) parts.push(textBlock(d.eyebrow, { size: sq ? 10.5 : compact ? 11 : 13, weight: 600, color: "#E3F3E6", maxW: lw, maxLines: sq ? 2 : 3, lh: 1.3 }));
+    const gg = sq ? 8 : 12, tot = parts.reduce((a, p) => a + p.h, 0) + gg * Math.max(0, parts.length - 1);
+    let yy = Math.max(a0 + 4, scy - tot / 2);
+    parts.forEach(p => { p.draw(pad, yy); yy += p.h + gg; });
+    waveBottom(zH, sq ? 30 : 44, T.bg);
+    top = zH + 4;
+  } else if (type === "produit") {
+    header(pad, HY, T);
+    const zTop = HY + 40 + (compact ? 12 : 18), zH = Math.round((fy - zTop) * (sq ? 0.52 : compact ? 0.56 : 0.58));
+    const contain = img && state.fit === "contain";
+    if (!img) coverDraw(C, ph, 0, zTop, SW, zH);
+    else if (contain) { C.fillStyle = CH.pale; C.fillRect(0, zTop, SW, zH); }
+    else { C.save(); C.beginPath(); C.rect(0, zTop, SW, zH); C.clip(); blurFill(img, 0, zTop, SW, zH, 0.15); C.restore(); }
+    const px = compact ? 26 : 35, py = compact ? 12 : 26, x0 = px, y0 = zTop + py, fw = SW - px * 2, fh = zH - py * 2;
+    if (img) {
+      C.save(); C.shadowColor = "rgba(0,0,0,.28)"; C.shadowBlur = 30; C.shadowOffsetY = 12; C.fillStyle = "#fff"; rr(x0, y0, fw, fh, 22); C.fill(); C.restore();
+      C.save(); rr(x0 + 4, y0 + 4, fw - 8, fh - 8, 18); C.clip();
+      if (contain) { C.fillStyle = "#fff"; C.fillRect(x0, y0, fw, fh); containDraw(img, x0 + 4, y0 + 4, fw - 8, fh - 8); }
+      else coverDraw(C, img, x0 + 4, y0 + 4, fw - 8, fh - 8, foc.x, foc.y);
+      C.restore();
+    }
+    if (d.badge) { const r = sq ? 44 : compact ? 54 : 76; macaron(x0 + 8 + r, y0 + 8 + r, r, d.badge); }
+    top = zTop + zH + (compact ? 12 : 24);
+  } else if (type === "garde" && img) {
+    const zH = sq ? 230 : compact ? Math.round(U * 0.36) : 380;
+    C.save(); C.beginPath(); C.rect(0, 0, SW, zH); C.clip();
+    {
+      blurFill(img, 0, 0, SW, zH, 0.45);
+      let iw = SW - 40, ih = iw * img.height / img.width; const hTop = compact ? 76 : 96, maxH = zH - hTop - (sq ? 40 : 46);
+      if (ih > maxH) { ih = maxH; iw = ih * img.width / img.height; }
+      const ix = (SW - iw) / 2, iy = hTop + (zH - hTop - 40 - ih) / 2;
+      C.save(); C.shadowColor = "rgba(0,0,0,.4)"; C.shadowBlur = 30; C.shadowOffsetY = 12; C.fillStyle = "#fff"; rr(ix - 3, iy - 3, iw + 6, ih + 6, 16); C.fill(); C.restore();
+      C.save(); rr(ix, iy, iw, ih, 13); C.clip(); coverDraw(C, img, ix, iy, iw, ih, foc.x, foc.y); C.restore();
+    }
+    C.restore();
+    waveBottom(zH, sq ? 36 : 50, T.bg);
+    header(LX + 10, compact ? 14 : 22, T, true);
+    top = zH + 4; mode = "center";
+  } else if (type === "ouvert") {
+    header(pad, HY, T);
+    const archW = sq ? 200 : compact ? 236 : 300, aBottom = fy + 14;
+    const archH = Math.min(compact ? 9999 : 560, aBottom - (HY + 40 + (compact ? 12 : 40)));
+    const ay = aBottom - archH, ax = SW - archW;
+    C.fillStyle = T.dark ? "rgba(255,255,255,.08)" : CH.pale; archPath(ax - 34, ay - 36, archW + 120, archH + 36, (archW + 120) / 2); C.fill();
+    C.save(); archPath(ax, ay, archW, archH, archW / 2); C.clip(); coverDraw(C, ph, ax, ay, archW, archH, foc.x, foc.y); C.restore();
+    C.strokeStyle = CH.green; C.lineWidth = 6; archPath(ax, ay, archW + 10, archH, archW / 2); C.stroke();
+    c.colW = SW - pad - archW - 12; c.titleW = LW;
+  } else if (type === "question") {
+    const zH = sq ? 220 : compact ? Math.round(U * 0.42) : 470;
+    coverDraw(C, ph, 0, 0, SW, zH, foc.x, foc.y);
+    waveBottom(zH, sq ? 36 : 50, T.bg);
+    header(LX + 10, compact ? 14 : 22, T, true);
+    top = zH + (compact ? 2 : 8);
+  } else if (type === "promo") {
+    header(pad, HY, T);
+    if (img) {
+      const r = sq ? 112 : compact ? 122 : 145; let cx, cy;
+      if (compact) { cx = SW + 30 - r; cy = HY + 44 + r; c.titleW = c.colW = c.lowW = SW - pad - (2 * r - 30) - 10; }
+      else { cx = SW - r - 4; cy = fy - r - 34; c.lowW = SW - pad - 2 * r - 14; }
+      C.save(); C.beginPath(); C.arc(cx, cy, r, 0, Math.PI * 2); C.clip(); coverDraw(C, img, cx - r, cy - r, 2 * r, 2 * r, foc.x, foc.y); C.restore();
+      C.strokeStyle = "#fff"; C.lineWidth = 6; C.beginPath(); C.arc(cx, cy, r - 3, 0, Math.PI * 2); C.stroke();
+    }
+  } else if (type === "fete") {
+    if (T.dark) stars(U);
+    header(pad, HY, T); mode = "center";
+  } else if (type === "sante") {
+    header(pad, HY, T);
+    if (hasSt) {
+      const r = sq ? 38 : compact ? 44 : 58, cx = SW - pad - r + 6, cy = HY + r - 6;
+      drawSticker(stId, cx, cy, r, stCol);
+      top = Math.max(top, cy + r + (compact ? 8 : 14));
+    }
+  } else {
+    header(pad, HY, T);
+    if (type === "garde") mode = "center";
+  }
+
+  const items = fit(build, d, c, bottom - top);
+  layout(items, top, bottom, mode);
+  footer(U, compact, T);
+  C.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+let raf = 0;
+let thumbT = 0;
+const tbuf = document.createElement("canvas");
+function renderThumbs() {
+  document.querySelectorAll("#variants canvas").forEach((tc, i) => {
+    draw(tbuf, { variant: i });
+    const w = 216, h = Math.round(w * tbuf.height / tbuf.width);
+    if (tc.width !== w) tc.width = w; if (tc.height !== h) tc.height = h;
+    const g = tc.getContext("2d"); g.imageSmoothingQuality = "high"; g.drawImage(tbuf, 0, 0, w, h);
+  });
+}
+function render() { draw(cv); clearTimeout(thumbT); thumbT = setTimeout(renderThumbs, 350); }
+function schedule() { cancelAnimationFrame(raf); raf = requestAnimationFrame(render); persist(); }
+
+/* ================= UI ================= */
+const $ = id => document.getElementById(id);
+function buildTypes() {
+  const el = $("types"); el.innerHTML = "";
+  for (const [id, t] of Object.entries(TYPES)) {
+    const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-pressed", id === state.type);
+    b.innerHTML = `<span>${t.icon}</span>${t.label}`;
+    b.onclick = () => { if (state.type !== id) { state.type = id; loadTypePhoto(); } buildAll(); schedule(); };
+    el.appendChild(b);
+  }
+  $("calWrap").hidden = state.type !== "sante";
+  const cal = $("cal"); cal.innerHTML = "";
+  for (const c of CALENDAR) { const o = document.createElement("option"); o.value = c.id; o.textContent = c.date ? `${c.date} — ${c.name}` : c.name; o.selected = c.id === state.cal; cal.appendChild(o); }
+}
+$("cal").onchange = e => { applyCalendar(e.target.value); buildAll(); schedule(); };
+function buildFormat() {
+  const fs = $("format"); fs.innerHTML = "";
+  for (const [id, f] of Object.entries(FORMATS)) { const o = document.createElement("option"); o.value = id; o.textContent = f.label; o.selected = id === state.format; fs.appendChild(o); }
+  const t = TYPES[state.type];
+  $("bgWrap").hidden = !t.choose || t.v[varOf(state.type)].f === "full";
+  const el = $("bgChips"); el.innerHTML = "";
+  for (const [k, l] of [["clair", "Clair"], ["vert", "Vert"]]) {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = l; b.setAttribute("aria-pressed", bgOf(state.type) === k);
+    b.onclick = () => { state.bg[state.type] = k; buildFormat(); schedule(); };
+    el.appendChild(b);
+  }
+}
+$("format").onchange = e => { state.format = e.target.value; buildVariants(); schedule(); };
+function buildFit() {
+  const el = $("photoFit"); el.innerHTML = "";
+  const t = { photo: TYPES[state.type].v[varOf(state.type)].photo };
+  $("photoCard").hidden = !t.photo;
+  $("photoHint").textContent = t.photo === "need" ? "Cette mise en page est faite pour une photo. Choisissez-en une ci-dessous ou ajoutez la vôtre." : t.photo === "option" ? (state.type === "garde" ? "Avec la photo de la façade, ou sans photo." : "La photo est facultative.") : "";
+  if (state.type === "produit" && varOf("produit") === 0 && photoImg) {
+    const opts = { cover: "Remplir le cadre", contain: "Produit détouré (image entière)" };
+    for (const [k, l] of Object.entries(opts)) { const b = document.createElement("button"); b.type = "button"; b.textContent = l; b.setAttribute("aria-pressed", k === state.fit); b.onclick = () => { state.fit = k; buildFit(); schedule(); }; el.appendChild(b); }
+  }
+  if (photoImg && t.photo === "option") { const b = document.createElement("button"); b.type = "button"; b.textContent = "Sans photo"; b.onclick = () => choosePhoto(null); el.appendChild(b); }
+}
+let undoData = null;
+function applyIdea(idea) {
+  const t = TYPES[state.type];
+  undoData = { type: state.type, data: Object.assign({}, state.data[state.type]) };
+  for (const f of t.fields) state.data[state.type][f.k] = idea.d[f.k] !== undefined ? idea.d[f.k] : f.d;
+  buildFields(); schedule();
+}
+function buildFields() {
+  const box = $("fields"); box.innerHTML = "";
+  const ideas = IDEAS[state.type];
+  if (ideas) {
+    const lab = document.createElement("label"); lab.className = "first"; lab.htmlFor = "ideas"; lab.textContent = `Textes tout prêts (${ideas.length})`;
+    const sel = document.createElement("select"); sel.id = "ideas";
+    const o0 = document.createElement("option"); o0.value = ""; o0.textContent = "Choisir un texte à adapter…"; sel.appendChild(o0);
+    ideas.forEach((idea, i) => { const o = document.createElement("option"); o.value = i; o.textContent = idea.n; sel.appendChild(o); });
+    sel.onchange = () => { if (sel.value !== "") applyIdea(ideas[+sel.value]); };
+    box.append(lab, sel);
+    const row = document.createElement("div"); row.className = "row";
+    const p = document.createElement("p"); p.className = "hint"; p.style.margin = "0"; p.style.flex = "1";
+    p.textContent = "Le texte remplace celui des champs ci-dessous. Vérifiez les dates, horaires et prix.";
+    row.appendChild(p);
+    if (undoData && undoData.type === state.type) {
+      const u = document.createElement("button"); u.type = "button"; u.className = "btn ghost sm"; u.textContent = "Annuler";
+      u.onclick = () => { Object.assign(state.data[state.type], undoData.data); undoData = null; buildFields(); schedule(); };
+      row.appendChild(u);
+    }
+    box.appendChild(row);
+    const hr = document.createElement("div"); hr.style.cssText = "border-top:1px solid var(--line);margin:14px 0 2px"; box.appendChild(hr);
+  }
+  TYPES[state.type].fields.forEach((f, i) => {
+    const lab = document.createElement("label"); lab.textContent = f.l; lab.htmlFor = "f_" + f.k; if (!i && !ideas) lab.className = "first";
+    const inp = document.createElement(f.t === "ta" ? "textarea" : "input"); if (f.t !== "ta") inp.type = "text";
+    inp.id = "f_" + f.k; inp.value = state.data[state.type][f.k] || "";
+    inp.oninput = () => { state.data[state.type][f.k] = inp.value; schedule(); };
+    box.append(lab, inp);
+  });
+  const p = document.createElement("p"); p.className = "hint"; p.textContent = "Astuce : entourez un mot d'astérisques (*mot*) pour le surligner en jaune.";
+  box.appendChild(p);
+}
+function buildVariants() {
+  const el = $("variants"); el.innerHTML = "";
+  TYPES[state.type].v.forEach((v, i) => {
+    const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-pressed", i === varOf(state.type));
+    const tc = document.createElement("canvas"); tc.width = 216; tc.height = Math.round(216 * FORMATS[state.format].h / W);
+    const sp = document.createElement("span"); sp.textContent = v.n;
+    b.append(tc, sp);
+    b.onclick = () => {
+      state.variant[state.type] = i;
+      if (v.photo === "need" && state.photo[state.type] === null) { delete state.photo[state.type]; loadTypePhoto(); }
+      buildAll(); schedule();
+    };
+    el.appendChild(b);
+  });
+}
+/* Sticker card */
+function stickerThumb(tc, sid, col) {
+  const prev = C; C = tc.getContext("2d"); C.setTransform(1, 0, 0, 1, 0, 0); C.clearRect(0, 0, tc.width, tc.height);
+  const k = tc.width / 100; C.setTransform(k, 0, 0, k, 0, 0); drawSticker(sid, 50, 50, 44, col, { flat: true });
+  C = prev;
+}
+function setSticker(sid) { state.sticker[state.type] = sid; buildStickers(); schedule(); }
+function buildStickers() {
+  const V = TYPES[state.type].v[varOf(state.type)];
+  $("stickerCard").hidden = !V.st;
+  if (!V.st) return;
+  const cur = stickerOf(state.type), rec = stickerRec(state.type), col = stickerColor(state.type);
+  const recName = STICKERS[rec] ? STICKERS[rec].n : "";
+  $("stHint").textContent = state.type === "sante"
+    ? `Proposé pour « ${curCal().name} » : ${recName} (point jaune). Touchez-en un autre pour changer.`
+    : `Proposé : ${recName} (point jaune). Touchez-en un autre pour changer.`;
+  $("stReset").hidden = cur === rec;
+  const g = $("stGrid"); g.innerHTML = "";
+  const none = document.createElement("button"); none.type = "button"; none.textContent = "Aucun"; none.setAttribute("aria-pressed", cur === "none"); none.onclick = () => setSticker("none"); g.appendChild(none);
+  for (const [id, def] of Object.entries(STICKERS)) {
+    const b = document.createElement("button"); b.type = "button"; b.title = def.n; b.setAttribute("aria-label", def.n); b.setAttribute("aria-pressed", id === cur);
+    if (id === rec) b.className = "rec";
+    const tc = document.createElement("canvas"); tc.width = 112; tc.height = 112; stickerThumb(tc, id, col); b.appendChild(tc);
+    b.onclick = () => setSticker(id); g.appendChild(b);
+  }
+  const e = $("emoChips"); e.innerHTML = "";
+  for (const em of EMOJIS) { const b = document.createElement("button"); b.type = "button"; b.textContent = em; b.setAttribute("aria-pressed", cur === "emo:" + em); b.onclick = () => setSticker("emo:" + em); e.appendChild(b); }
+  const o = $("stOwn"); o.innerHTML = "";
+  const add = document.createElement("label"); add.className = "add"; add.title = "Importer une image"; add.innerHTML = '＋<input type="file" accept="image/*">';
+  add.querySelector("input").onchange = async ev => {
+    const f = ev.target.files[0]; if (!f) return;
+    const src = await blobToDataURL(await shrink(f, 360));
+    const rec2 = { id: "img:" + Date.now().toString(36), src };
+    ownStickers = [rec2, ...ownStickers].slice(0, 12); store.set("stickers", ownStickers); setSticker(rec2.id);
+  };
+  o.appendChild(add);
+  for (const s of ownStickers) {
+    const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-pressed", s.id === cur); b.title = "Votre image";
+    const tc = document.createElement("canvas"); tc.width = 112; tc.height = 112; b.appendChild(tc);
+    const im = stickerImage(s.id); const paint = () => stickerThumb(tc, s.id, col); if (im.complete) paint(); else im.addEventListener("load", paint, { once: true });
+    b.onclick = () => setSticker(s.id);
+    const x = document.createElement("span"); x.className = "x"; x.textContent = "×"; x.title = "Supprimer";
+    x.onclick = ev => { ev.stopPropagation(); ownStickers = ownStickers.filter(z => z.id !== s.id); store.set("stickers", ownStickers); stickerImgs.delete(s.id); for (const k of Object.keys(state.sticker)) if (state.sticker[k] === s.id) delete state.sticker[k]; buildStickers(); schedule(); };
+    b.appendChild(x); o.appendChild(b);
+  }
+}
+$("stResetBtn").onclick = () => { delete state.sticker[state.type]; buildStickers(); schedule(); };
+$("emoOk").onclick = () => { const v = $("emoIn").value.trim(); if (v) { setSticker("emo:" + Array.from(v).slice(0, 4).join("")); $("emoIn").value = ""; } };
+$("emoIn").onkeydown = e => { if (e.key === "Enter") $("emoOk").click(); };
+function numberCards() { let n = 0; document.querySelectorAll(".panel > .card").forEach(cd => { if (!cd.hidden) { const b = cd.querySelector("h2 b"); if (b) b.textContent = ++n; } }); }
+function buildAll() { buildTypes(); buildVariants(); buildFormat(); buildFit(); buildStickers(); buildFields(); buildStock(); refreshLib(); numberCards(); }
+
+function updateLinks() {
+  const q = $("webQ").value.trim();
+  $("lkPexels").href = q ? `https://www.pexels.com/fr-fr/chercher/${encodeURIComponent(q)}/` : "https://www.pexels.com/fr-fr/";
+  $("lkUnsplash").href = q ? `https://unsplash.com/fr/s/photos/${encodeURIComponent(q)}` : "https://unsplash.com/fr";
+}
+$("webQ").oninput = updateLinks;
+
+/* Brand sheet */
+function miniLogo() {
+  const c = $("miniLogo"), prev = C; C = c.getContext("2d"); C.setTransform(1, 0, 0, 1, 0, 0); C.clearRect(0, 0, 72, 72);
+  if (logoImg) { const k = Math.min(72 / logoImg.width, 72 / logoImg.height); C.drawImage(logoImg, (72 - logoImg.width * k) / 2, (72 - logoImg.height * k) / 2, logoImg.width * k, logoImg.height * k); }
+  else mark(0, 0, 72, CH.green, "#fff");
+  C = prev;
+  $("topSub").textContent = "Pharmacie " + (brand.name || "");
+}
+function saveBrand() { store.set("brand", brand); miniLogo(); schedule(); }
+for (const k of ["name", "tagline", "phone", "address"]) { const el = $("b_" + k); el.value = brand[k] || ""; el.oninput = () => { brand[k] = el.value; saveBrand(); }; }
+$("b_whatsapp").checked = !!brand.whatsapp; $("b_whatsapp").onchange = e => { brand.whatsapp = e.target.checked; saveBrand(); };
+$("openBrand").onclick = () => $("brandSheet").classList.add("on");
+$("closeBrand").onclick = () => $("brandSheet").classList.remove("on");
+$("brandSheet").onclick = e => { if (e.target.id === "brandSheet") $("brandSheet").classList.remove("on"); };
+
+function loadImage(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+function blobToDataURL(b) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(b); }); }
+async function shrink(blob, max = 1800) {
+  const url = URL.createObjectURL(blob);
+  try {
+    const img = await loadImage(url);
+    const k = Math.min(1, max / Math.max(img.width, img.height));
+    if (k === 1 && blob.size < 1.5e6) return blob;
+    const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    const png = /png|webp/.test(blob.type);
+    return await new Promise(r => c.toBlob(r, png ? "image/png" : "image/jpeg", 0.9));
+  } finally { URL.revokeObjectURL(url); }
+}
+(async () => { const src = store.get("logo", null) || CFG.logo; if (src) try { logoImg = await loadImage(src); miniLogo(); schedule(); } catch {} })();
+$("b_logo").onchange = async e => { const f = e.target.files[0]; if (!f) return; const url = await blobToDataURL(await shrink(f, 700)); store.set("logo", url); logoImg = await loadImage(url); saveBrand(); };
+$("b_noLogo").onclick = () => { store.set("logo", null); $("b_logo").value = ""; logoImg = null; saveBrand(); };
+
+/* Photos: ready-made library (photos/) + the user's own (IndexedDB) */
+let photoImg = null, photos = [], loadSeq = 0;
+const urls = new Map(), libCache = new Map();
+function buildStock() {
+  const g = $("libStock"); g.innerHTML = "";
+  const cur = photoIdFor(state.type);
+  for (const p of LIB) {
+    const b = document.createElement("button"); b.type = "button"; b.className = "ph"; b.setAttribute("aria-pressed", p.id === cur); b.title = p.label;
+    const im = document.createElement("img"); im.alt = p.label; im.loading = "lazy"; im.src = p.src; b.appendChild(im);
+    const cap = document.createElement("span"); cap.className = "cap"; cap.textContent = p.label; b.appendChild(cap);
+    b.onclick = () => choosePhoto(p.id);
+    g.appendChild(b);
+  }
+}
+async function refreshLib() {
+  try { photos = (await idb.all()) || []; } catch { photos = memPhotos.slice(); }
+  photos.sort((a, b) => b.ts - a.ts);
+  const g = $("lib"); g.innerHTML = "";
+  const add = document.createElement("label"); add.className = "ph add"; add.title = "Ajouter des photos";
+  add.innerHTML = '＋<input type="file" accept="image/*" multiple>';
+  add.querySelector("input").onchange = async e => { for (const f of e.target.files) await addPhoto(f); };
+  g.appendChild(add);
+  const cur = photoIdFor(state.type);
+  for (const p of photos) {
+    if (!urls.has(p.id)) urls.set(p.id, URL.createObjectURL(p.blob));
+    const b = document.createElement("button"); b.type = "button"; b.className = "ph"; b.setAttribute("aria-pressed", p.id === cur);
+    const im = document.createElement("img"); im.alt = ""; im.src = urls.get(p.id); b.appendChild(im);
+    b.onclick = () => choosePhoto(p.id);
+    const x = document.createElement("span"); x.className = "x"; x.textContent = "×"; x.title = "Supprimer";
+    x.onclick = async ev => { ev.stopPropagation(); try { await idb.del(p.id); } catch { const i = memPhotos.findIndex(m => m.id === p.id); if (i >= 0) memPhotos.splice(i, 1); } for (const k of Object.keys(state.photo)) if (state.photo[k] === p.id) delete state.photo[k]; await loadTypePhoto(); buildAll(); schedule(); };
+    b.appendChild(x); g.appendChild(b);
+  }
+}
+async function addPhoto(blob) {
+  const small = await shrink(blob);
+  const rec = { id: "p" + Date.now() + Math.random().toString(36).slice(2, 6), blob: small, ts: Date.now() };
+  try { await idb.put(rec); } catch { memPhotos.push(rec); }
+  await refreshLib(); await choosePhoto(rec.id);
+}
+async function imageFor(id) {
+  if (!id) return null;
+  if (id.startsWith("lib:")) {
+    const l = LIB.find(x => x.id === id); if (!l) return null;
+    if (!libCache.has(id)) libCache.set(id, loadImage(l.src));
+    return libCache.get(id);
+  }
+  const p = photos.find(x => x.id === id); if (!p) return null;
+  if (!urls.has(id)) urls.set(id, URL.createObjectURL(p.blob));
+  return loadImage(urls.get(id));
+}
+async function loadTypePhoto() {
+  const seq = ++loadSeq;
+  let img = null;
+  try { img = await imageFor(photoIdFor(state.type)); } catch { img = null; }
+  if (seq !== loadSeq) return;
+  photoImg = img; buildFit(); schedule();
+}
+async function choosePhoto(id) {
+  state.photo[state.type] = id;
+  buildStock(); refreshLib();
+  await loadTypePhoto();
+}
+
+/* ================= Export ================= */
+let downloads = null;
+function fileName() {
+  const d = state.data[state.type];
+  const slug = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+  return `${slug("pharmacie " + brand.name)}-${slug(d.title || d.value || state.type) || state.type}-${state.format}.png`;
+}
+const toBlob = () => new Promise((res, rej) => { render(); try { cv.toBlob(b => b ? res(b) : rej(new Error("vide")), "image/png"); } catch (e) { rej(e); } });
+const LOCAL_MSG = "Pour télécharger, ouvrez le studio depuis son adresse web (pas en double-cliquant sur le fichier).";
+function showOverlay() { render(); try { $("ovImg").src = cv.toDataURL("image/png"); $("ov").classList.add("on"); } catch { $("dlStatus").textContent = LOCAL_MSG; } }
+$("view").onclick = showOverlay;
+$("ovClose").onclick = () => $("ov").classList.remove("on");
+const inFrame = (() => { try { return window.self !== window.top; } catch { return true; } })();
+$("dl").onclick = async () => {
+  const st = $("dlStatus"); st.textContent = "";
+  let blob; try { blob = await toBlob(); } catch { st.textContent = LOCAL_MSG; return; }
+  if (downloads) { try { await downloads.save({ filename: fileName(), data: blob }); st.textContent = "Image enregistrée."; } catch (e) { if (e && e.code === "declined") st.textContent = "Téléchargement annulé."; else showOverlay(); } return; }
+  if (inFrame) { showOverlay(); return; }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = fileName();
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  st.textContent = "Image enregistrée dans vos téléchargements.";
+};
+(() => { if (inFrame || !navigator.canShare) return; try { if (navigator.canShare({ files: [new File([new Blob(["x"], { type: "image/png" })], "t.png", { type: "image/png" })] })) $("share").hidden = false; } catch {} })();
+$("share").onclick = async () => { let b; try { b = await toBlob(); } catch { $("dlStatus").textContent = LOCAL_MSG; return; } const f = new File([b], fileName(), { type: "image/png" }); try { await navigator.share({ files: [f] }); } catch {} };
+
+/* ================= Boot ================= */
+buildAll(); miniLogo(); updateLinks(); render();
+refreshLib().then(loadTypePhoto);
+if (!store.get("brand", null)) setTimeout(() => $("brandSheet").classList.add("on"), 400);
+if (document.fonts) {
+  Promise.all(["800 40px 'Bricolage Grotesque'", "700 40px 'Bricolage Grotesque'", "400 40px Inter", "600 40px Inter", "700 40px Inter", "800 40px Inter"].map(f => document.fonts.load(f))).then(schedule).catch(() => {});
+  document.fonts.ready.then(schedule);
+}
+if (window.claude && window.claude.use) window.claude.use("downloads").then(d => { downloads = d; }).catch(() => {});
+})();
+</script>
+</body>
+</html>
