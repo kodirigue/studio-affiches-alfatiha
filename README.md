@@ -2,6 +2,8 @@
 
 Site 100 % statique : aucun serveur, aucune clé API, aucun abonnement. Coût : 0 F.
 
+**En ligne :** https://kodirigue.github.io/studio-affiches-alfatiha/ (GitHub Pages, dépôt `kodirigue/studio-affiches-alfatiha`). Pour mettre à jour : `git push` sur `main`, le site se met à jour en une minute environ.
+
 ## Ce qu'il fait
 
 - **Une charte fixe** : vert enseigne, vert profond, jaune ; titres en Bricolage Grotesque, texte en Inter. Sur chaque affiche : le logo en haut à gauche et la vague contact (téléphone, WhatsApp, repère) en bas.
